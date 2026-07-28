@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/modernist-f616c0fc-2f19-4ca9-b4bb-2a0de125aa29/styles.css">
+<script src="_ds/modernist-f616c0fc-2f19-4ca9-b4bb-2a0de125aa29/_ds_bundle.js"></script>
+<script src="places.js"></script>
+<script src="image-slot.js"></script>
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)}
+a{color:var(--color-accent)}
+a:hover{color:var(--color-accent-700)}
+@keyframes fly{0%{offset-distance:0%;opacity:0}6%{opacity:1}92%{opacity:1}100%{offset-distance:100%;opacity:0}}
+@keyframes iceFloat{0%,100%{transform:translateY(0) rotate(var(--tilt,0deg))}50%{transform:translateY(-.045em) rotate(calc(var(--tilt,0deg) * -.6))}}
+@keyframes drip{0%,72%{transform:scaleY(1);opacity:.9}86%{transform:scaleY(1.55);opacity:1}100%{transform:scaleY(1);opacity:.9}}
+@keyframes spinMill{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+@keyframes sway{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(5deg)}}
+@keyframes brush{0%,100%{transform:translateY(0) rotate(var(--tilt,0deg))}50%{transform:translateY(-.03em) rotate(calc(var(--tilt,0deg) + 1.5deg))}}
+@media(prefers-reduced-motion:reduce){[data-anim]{animation:none !important}}
+@media(prefers-reduced-motion:reduce){[data-plane]{animation:none !important;offset-distance:52%}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:var(--color-bg);--color-bg:{{ t.bg }};--color-text:{{ t.text }};--color-divider:{{ t.divider }};--color-accent:{{ t.accent }};--color-accent-100:{{ t.a100 }};--color-accent-400:{{ t.a400 }};--color-accent-700:{{ t.a700 }};--color-neutral-200:{{ t.n200 }};--color-neutral-400:{{ t.n400 }};--color-neutral-500:{{ t.n500 }};--color-neutral-600:{{ t.n600 }};--color-neutral-700:{{ t.n700 }};--color-neutral-800:{{ t.n800 }};--p-bg:{{ t.pbg }};--p-card:{{ t.pcard }};--p-line:{{ t.pline }};--p-ice:{{ t.pice }};--p-dim:{{ t.pdim }};--p-fg:{{ t.pfg }};color:var(--color-text)">
+
+<nav style="position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:28px;flex-wrap:wrap;padding:14px 40px;background:var(--color-bg);border-bottom:2px solid var(--color-divider)">
+  <div style="font-family:var(--font-heading);font-weight:800;font-size:16px;letter-spacing:-.02em;margin-right:auto">OROZCO&nbsp;VELA <span style="color:var(--color-accent)">/</span> ISLANDIA 26</div>
+  <a href="#ruta" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:var(--color-text)" style-hover="color:var(--color-accent)">Ruta</a>
+  <a href="#dias" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:var(--color-text)" style-hover="color:var(--color-accent)">15 días</a>
+  <a href="#hoteles" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:var(--color-text)" style-hover="color:var(--color-accent)">Hoteles</a>
+  <a href="#lugares" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:var(--color-text)" style-hover="color:var(--color-accent)">Lugares</a>
+  <a href="#maleta" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:var(--color-text)" style-hover="color:var(--color-accent)">Maleta</a>
+  <a href="#ropa" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:var(--color-text)" style-hover="color:var(--color-accent)">Ropa</a>
+  <a href="#idioma" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:var(--color-text)" style-hover="color:var(--color-accent)">Idioma</a>
+  <div style="display:flex;border:1px solid var(--color-divider)">
+    <button onClick="{{ setIs }}" style="font-family:var(--font-heading);font-weight:800;font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:8px 14px;border:0;cursor:pointer;background:{{ mIsBg }};color:{{ mIsFg }}">Modo Islandia</button>
+    <button onClick="{{ setNl }}" style="font-family:var(--font-heading);font-weight:800;font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:8px 14px;border:0;border-left:1px solid var(--color-divider);cursor:pointer;background:{{ mNlBg }};color:{{ mNlFg }}">Modo Holanda</button>
+  </div>
+</nav>
+
+<header data-screen-label="Portada" style="padding:64px 40px 0;border-bottom:2px solid var(--color-divider)">
+  <div style="max-width:1180px;margin:0 auto">
+    <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:baseline;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-neutral-700)">
+      <span style="color:var(--color-accent)">Bitácora de viaje</span>
+      <span>Familia Orozco Vela</span>
+      <span>17 → 31 oct 2026</span>
+      <span>3 viajeros</span>
+    </div>
+    <sc-if value="{{ isIs }}" hint-placeholder-val="{{ true }}">
+      <h1 style="margin:30px 0 0;font-family:var(--font-heading);font-weight:800;font-size:clamp(54px,14.5vw,186px);line-height:.92;letter-spacing:-.045em;text-transform:uppercase;color:var(--color-text)">Islandia</h1>
+      <h2 style="font-size:clamp(24px,5.4vw,66px);line-height:.95;letter-spacing:-.045em;margin:10px 0 34px;text-transform:uppercase;color:var(--color-accent);font-family:var(--font-heading);font-weight:800">y Países Bajos</h2>
+    </sc-if>
+
+    <sc-if value="{{ isNl }}" hint-placeholder-val="{{ false }}">
+      <h1 style="margin:30px 0 0;font-family:var(--font-heading);font-weight:800;font-size:clamp(42px,11.5vw,152px);line-height:.92;letter-spacing:-.045em;text-transform:uppercase;color:var(--color-text)">Países Bajos</h1>
+      <h2 style="font-size:clamp(24px,5.4vw,66px);line-height:.95;letter-spacing:-.045em;margin:10px 0 34px;text-transform:uppercase;color:var(--color-accent);font-family:var(--font-heading);font-weight:800">y también Islandia</h2>
+    </sc-if>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border-top:2px solid var(--color-divider);border-left:1px solid var(--color-divider)">
+      <div style="padding:22px 20px 24px;border-right:1px solid var(--color-divider);background:var(--color-accent);color:var(--color-bg)">
+        <div style="font-size:clamp(40px,7vw,68px);font-weight:800;font-family:var(--font-heading);line-height:.9;font-variant-numeric:tabular-nums">{{ d }}</div>
+        <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:10px;opacity:.85">Días</div>
+      </div>
+      <div style="padding:22px 20px 24px;border-right:1px solid var(--color-divider)">
+        <div style="font-size:clamp(40px,7vw,68px);font-weight:800;font-family:var(--font-heading);line-height:.9;font-variant-numeric:tabular-nums">{{ h }}</div>
+        <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:10px;color:var(--color-neutral-700)">Horas</div>
+      </div>
+      <div style="padding:22px 20px 24px;border-right:1px solid var(--color-divider)">
+        <div style="font-size:clamp(40px,7vw,68px);font-weight:800;font-family:var(--font-heading);line-height:.9;font-variant-numeric:tabular-nums">{{ m }}</div>
+        <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:10px;color:var(--color-neutral-700)">Minutos</div>
+      </div>
+      <div style="padding:22px 20px 24px;border-right:1px solid var(--color-divider)">
+        <div style="font-size:clamp(40px,7vw,68px);font-weight:800;font-family:var(--font-heading);line-height:.9;font-variant-numeric:tabular-nums;color:var(--color-neutral-600)">{{ s }}</div>
+        <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:10px;color:var(--color-neutral-700)">Segundos</div>
+      </div>
+    </div>
+    <p style="font-size:15px;color:var(--color-neutral-700);margin:16px 0 40px">para que despegue el AM 247 en Guadalajara.</p>
+  </div>
+</header>
+
+<section data-screen-label="Viajeros" style="padding:72px 40px;border-bottom:2px solid var(--color-divider)">
+  <div style="max-width:1180px;margin:0 auto">
+    <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:14px">Quiénes van</div>
+    <h2 style="font-size:clamp(28px,4.6vw,48px);letter-spacing:-.03em;margin:0 0 14px">Tres pasajeros, una sola fila</h2>
+    <p style="font-size:18px;max-width:58ch;color:var(--color-neutral-700);margin:0 0 38px">Los asientos quedaron juntos en los cuatro vuelos. En el transatlántico van en la fila 28, y en el brinco a Islandia en la fila 8.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0;border-top:2px solid var(--color-divider);border-left:1px solid var(--color-divider)">
+      <div style="padding:24px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+        <div style="font-family:var(--font-heading);font-weight:800;font-size:26px;letter-spacing:-.02em">Martha Mireya</div>
+        <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-accent);margin-top:8px">Vela de Orozco</div>
+        <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--color-divider);font-size:14px;letter-spacing:.08em;color:var(--color-neutral-700);font-variant-numeric:tabular-nums">19D · 28G · 8B · 18A</div>
+      </div>
+      <div style="padding:24px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+        <div style="font-family:var(--font-heading);font-weight:800;font-size:26px;letter-spacing:-.02em">Sergio</div>
+        <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-accent);margin-top:8px">Orozco Alatorre</div>
+        <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--color-divider);font-size:14px;letter-spacing:.08em;color:var(--color-neutral-700);font-variant-numeric:tabular-nums">19E · 28H · 8A · 18B</div>
+      </div>
+      <div style="padding:24px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+        <div style="font-family:var(--font-heading);font-weight:800;font-size:26px;letter-spacing:-.02em">Sergio Omar</div>
+        <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-accent);margin-top:8px">Orozco Vela · organiza</div>
+        <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--color-divider);font-size:14px;letter-spacing:.08em;color:var(--color-neutral-700);font-variant-numeric:tabular-nums">19F · 28J · 8C · 18C</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ruta" data-screen-label="Ruta" style="padding:72px 40px;border-bottom:2px solid var(--color-divider)">
+  <div style="max-width:1180px;margin:0 auto">
+    <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:14px">La ruta</div>
+    <h2 style="font-size:clamp(28px,4.6vw,48px);letter-spacing:-.03em;margin:0 0 14px">Cuatro despegues de ida</h2>
+    <p style="font-size:18px;max-width:60ch;color:var(--color-neutral-700);margin:0 0 38px">Guadalajara, Ciudad de México, Ámsterdam, Reikiavik. Seis vuelos en total contando el regreso, con dos aerolíneas y dos reservas distintas.</p>
+
+    <div style="background:var(--p-bg);color:var(--p-fg);padding:0 0 12px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));border-bottom:1px solid var(--p-line)">
+        <div style="border-right:1px solid var(--p-line)">
+          <dc-import name="SplitFlap" value="{{ gdl }}" label="Guadalajara" sub="UTC−6" note="Casa · hora de salida" hint-size="100%,140px"></dc-import>
+        </div>
+        <div style="border-right:1px solid var(--p-line)">
+          <dc-import name="SplitFlap" value="{{ kef }}" label="Reikiavik" sub="UTC+0" note="+6 h respecto a casa" hint-size="100%,140px"></dc-import>
+        </div>
+        <div>
+          <dc-import name="SplitFlap" value="{{ ams }}" label="Ámsterdam" sub="UTC+2" note="+8 h respecto a casa" hint-size="100%,140px"></dc-import>
+        </div>
+      </div>
+
+      <iframe src="route-map.html?m={{ mode }}" title="Mapa animado de la ruta" loading="lazy" style="width:100%;height:min(52vw,470px);border:0;display:block;background:var(--p-bg)"></iframe>
+
+      <div style="padding:0 34px">
+
+      <div style="border-top:2px solid var(--p-line);margin-top:22px">
+        <div style="display:grid;grid-template-columns:110px 1fr auto;gap:18px;align-items:center;padding:16px 0;border-bottom:1px solid var(--p-line)">
+          <div><div style="font-family:var(--font-heading);font-weight:800;font-size:14px;letter-spacing:.06em;color:var(--p-ice)">AM 247</div><div style="font-size:10px;letter-spacing:.14em;color:var(--p-dim);margin-top:4px">SÁB 17 OCT</div></div>
+          <div><div style="font-family:var(--font-heading);font-weight:800;font-size:18px;letter-spacing:-.01em">Guadalajara → Ciudad de México</div><div style="font-size:13px;color:var(--p-dim);margin-top:3px">Terminal 1 a Terminal 2</div></div>
+          <div style="text-align:right"><div style="font-family:var(--font-heading);font-weight:800;font-size:16px;white-space:nowrap;font-variant-numeric:tabular-nums">17:13 → 18:50</div><div style="font-size:11px;letter-spacing:.1em;color:var(--p-dim);margin-top:4px">1 H 37 M</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:110px 1fr auto;gap:18px;align-items:center;padding:16px 0;border-bottom:1px solid var(--p-line)">
+          <div><div style="font-family:var(--font-heading);font-weight:800;font-size:14px;letter-spacing:.06em;color:var(--p-ice)">AM 25</div><div style="font-size:10px;letter-spacing:.14em;color:var(--p-dim);margin-top:4px">SÁB 17 OCT</div></div>
+          <div><div style="font-family:var(--font-heading);font-weight:800;font-size:18px;letter-spacing:-.01em">Ciudad de México → Ámsterdam</div><div style="font-size:13px;color:var(--p-dim);margin-top:3px">Boeing 787-9 · llega el domingo 18</div></div>
+          <div style="text-align:right"><div style="font-family:var(--font-heading);font-weight:800;font-size:16px;white-space:nowrap;font-variant-numeric:tabular-nums">22:30 → 17:20</div><div style="font-size:11px;letter-spacing:.1em;color:var(--p-dim);margin-top:4px">10 H 50 M</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:110px 1fr auto;gap:18px;align-items:center;padding:16px 0;border-bottom:1px solid var(--p-line)">
+          <div><div style="font-family:var(--font-heading);font-weight:800;font-size:14px;letter-spacing:.06em;color:var(--p-ice)">HV 6887</div><div style="font-size:10px;letter-spacing:.14em;color:var(--p-dim);margin-top:4px">LUN 19 OCT</div></div>
+          <div><div style="font-family:var(--font-heading);font-weight:800;font-size:18px;letter-spacing:-.01em">Ámsterdam → Reikiavik</div><div style="font-size:13px;color:var(--p-dim);margin-top:3px">Transavia · el vuelo más madrugador del viaje</div></div>
+          <div style="text-align:right"><div style="font-family:var(--font-heading);font-weight:800;font-size:16px;white-space:nowrap;font-variant-numeric:tabular-nums">06:35 → 07:50</div><div style="font-size:11px;letter-spacing:.1em;color:var(--p-dim);margin-top:4px">3 H 15 M</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:110px 1fr auto;gap:18px;align-items:center;padding:16px 0;border-bottom:1px solid var(--p-line)">
+          <div><div style="font-family:var(--font-heading);font-weight:800;font-size:14px;letter-spacing:.06em;color:var(--p-ice)">HV 6888</div><div style="font-size:10px;letter-spacing:.14em;color:var(--p-dim);margin-top:4px">VIE 23 OCT</div></div>
+          <div><div style="font-family:var(--font-heading);font-weight:800;font-size:18px;letter-spacing:-.01em">Reikiavik → Ámsterdam</div><div style="font-size:13px;color:var(--p-dim);margin-top:3px">Transavia</div></div>
+          <div style="text-align:right"><div style="font-family:var(--font-heading);font-weight:800;font-size:16px;white-space:nowrap;font-variant-numeric:tabular-nums">08:50 → 13:55</div><div style="font-size:11px;letter-spacing:.1em;color:var(--p-dim);margin-top:4px">3 H 05 M</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:110px 1fr auto;gap:18px;align-items:center;padding:16px 0;border-bottom:1px solid var(--p-line)">
+          <div><div style="font-family:var(--font-heading);font-weight:800;font-size:14px;letter-spacing:.06em;color:var(--p-ice)">AM 26</div><div style="font-size:10px;letter-spacing:.14em;color:var(--p-dim);margin-top:4px">VIE 30 OCT</div></div>
+          <div><div style="font-family:var(--font-heading);font-weight:800;font-size:18px;letter-spacing:-.01em">Ámsterdam → Ciudad de México</div><div style="font-size:13px;color:var(--p-dim);margin-top:3px">Boeing 787-9 · llega el sábado 31</div></div>
+          <div style="text-align:right"><div style="font-family:var(--font-heading);font-weight:800;font-size:16px;white-space:nowrap;font-variant-numeric:tabular-nums">22:00 → 03:05</div><div style="font-size:11px;letter-spacing:.1em;color:var(--p-dim);margin-top:4px">12 H 05 M</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:110px 1fr auto;gap:18px;align-items:center;padding:16px 0">
+          <div><div style="font-family:var(--font-heading);font-weight:800;font-size:14px;letter-spacing:.06em;color:var(--p-ice)">AM 200</div><div style="font-size:10px;letter-spacing:.14em;color:var(--p-dim);margin-top:4px">SÁB 31 OCT</div></div>
+          <div><div style="font-family:var(--font-heading);font-weight:800;font-size:18px;letter-spacing:-.01em">Ciudad de México → Guadalajara</div><div style="font-size:13px;color:var(--p-dim);margin-top:3px">En casa para el desayuno</div></div>
+          <div style="text-align:right"><div style="font-family:var(--font-heading);font-weight:800;font-size:16px;white-space:nowrap;font-variant-numeric:tabular-nums">06:05 → 07:40</div><div style="font-size:11px;letter-spacing:.1em;color:var(--p-dim);margin-top:4px">1 H 35 M</div></div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <div style="background:var(--color-accent);color:var(--color-bg);padding:38px 34px;margin-top:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px">
+      <div>
+        <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;opacity:.8;margin-bottom:12px">Atención</div>
+        <div style="font-family:var(--font-heading);font-weight:800;font-size:clamp(26px,3.4vw,40px);line-height:1.02;letter-spacing:-.03em">La noche corta: domingo 18 de octubre</div>
+      </div>
+      <div style="font-size:16px;line-height:1.6">
+        <p style="margin:0 0 12px">Aterrizan en Schiphol a las 17:20 del domingo, y el vuelo a Islandia sale del mismo aeropuerto a las 06:35 del lunes. Hay que estar de vuelta en el mostrador cerca de las 04:30, o sea despertarse alrededor de las 3:30 de la mañana.</p>
+        <p style="margin:0">Por eso conviene que el hotel de esa noche esté pegado a Schiphol y no en el centro.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="dias" data-screen-label="Días" style="padding:72px 40px;border-bottom:2px solid var(--color-divider)">
+  <div style="max-width:1180px;margin:0 auto">
+    <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:14px">Día por día</div>
+    <h2 style="font-size:clamp(28px,4.6vw,48px);letter-spacing:-.03em;margin:0 0 14px">Los quince días</h2>
+    <p style="font-size:18px;max-width:60ch;color:var(--color-neutral-700);margin:0 0 26px">La barra roja marca Islandia, la gris Países Bajos, y la negra los días que se van en aeropuertos.</p>
+
+    <div style="border-top:2px solid var(--color-divider)">
+      <div style="display:grid;grid-template-columns:96px 1fr;border-bottom:1px solid var(--color-divider);border-left:6px solid var(--color-text)">
+        <div style="padding:20px 14px;border-right:1px solid var(--color-divider)"><div style="font-family:var(--font-heading);font-weight:800;font-size:28px;line-height:1">17</div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-neutral-600);margin-top:6px">OCT · SÁB</div></div>
+        <div style="padding:20px 22px"><span style="display:inline-block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:3px 9px;background:var(--color-text);color:var(--color-bg);margin-bottom:10px">Vuelo</span><div style="font-family:var(--font-heading);font-weight:800;font-size:21px;letter-spacing:-.02em">Empieza el viaje</div><p style="margin:6px 0 0;font-size:16px;color:var(--color-neutral-700)">Salida de Guadalajara por la tarde, escala de casi cuatro horas en la Ciudad de México y el salto del Atlántico de noche.</p><div style="font-size:11px;letter-spacing:.12em;color:var(--color-neutral-600);margin-top:10px">17:13 GDL · 22:30 MEX · NOCHE A BORDO</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:96px 1fr;border-bottom:1px solid var(--color-divider);border-left:6px solid var(--color-accent);background:var(--color-accent-100)">
+        <div style="padding:20px 14px;border-right:1px solid var(--color-divider)"><div style="font-family:var(--font-heading);font-weight:800;font-size:28px;line-height:1">18</div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-neutral-600);margin-top:6px">OCT · DOM</div></div>
+        <div style="padding:20px 22px"><span style="display:inline-block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:3px 9px;background:var(--color-accent);color:var(--color-bg);margin-bottom:10px">Falta hotel</span><div style="font-family:var(--font-heading);font-weight:800;font-size:21px;letter-spacing:-.02em">Llegada a Ámsterdam</div><p style="margin:6px 0 0;font-size:16px;color:var(--color-neutral-800)">Aterrizan a las 17:20. Noche corta: hay que dormir junto al aeropuerto y poner despertador a las 3:30.</p><div style="font-size:11px;letter-spacing:.12em;color:var(--color-accent-700);margin-top:10px">17:20 AMS · HOSPEDAJE POR RESERVAR</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:96px 1fr;border-bottom:1px solid var(--color-divider);border-left:6px solid var(--color-accent)">
+        <div style="padding:20px 14px;border-right:1px solid var(--color-divider)"><div style="font-family:var(--font-heading);font-weight:800;font-size:28px;line-height:1">19</div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-neutral-600);margin-top:6px">OCT · LUN</div></div>
+        <div style="padding:20px 22px"><span style="display:inline-block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:3px 9px;border:1px solid var(--color-accent);color:var(--color-accent);margin-bottom:10px">Islandia · Día 1</span><div style="font-family:var(--font-heading);font-weight:800;font-size:21px;letter-spacing:-.02em">Reikiavik desde temprano</div><p style="margin:6px 0 0;font-size:16px;color:var(--color-neutral-700)">Aterrizan a las 07:50, con el Flybus están en el hotel antes de las diez. El cuarto se entrega hasta las 15:00 pero guardan las maletas.</p><div style="font-size:11px;letter-spacing:.12em;color:var(--color-neutral-600);margin-top:10px">07:50 KEF · CHECK-IN 15:00 · REYKJAVIK LIGHTS</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:96px 1fr;border-bottom:1px solid var(--color-divider);border-left:6px solid var(--color-accent)">
+        <div style="padding:20px 14px;border-right:1px solid var(--color-divider)"><div style="font-family:var(--font-heading);font-weight:800;font-size:28px;line-height:1">20</div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-neutral-600);margin-top:6px">OCT · MAR</div></div>
+        <div style="padding:20px 22px"><span style="display:inline-block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:3px 9px;border:1px solid var(--color-accent);color:var(--color-accent);margin-bottom:10px">Islandia · Día 2</span><div style="font-family:var(--font-heading);font-weight:800;font-size:21px;letter-spacing:-.02em">Día completo por definir</div><p style="margin:6px 0 0;font-size:16px;color:var(--color-neutral-700)">El mejor candidato para la Costa Sur con caminata en glaciar: es el día largo y conviene hacerlo con energía.</p><div style="font-size:11px;letter-spacing:.12em;color:var(--color-neutral-600);margin-top:10px">LUZ DE 08:50 A 17:40 · TOUR POR RESERVAR</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:96px 1fr;border-bottom:1px solid var(--color-divider);border-left:6px solid var(--color-accent)">
+        <div style="padding:20px 14px;border-right:1px solid var(--color-divider)"><div style="font-family:var(--font-heading);font-weight:800;font-size:28px;line-height:1">21</div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-neutral-600);margin-top:6px">OCT · MIÉ</div></div>
+        <div style="padding:20px 22px"><span style="display:inline-block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:3px 9px;border:1px solid var(--color-accent);color:var(--color-accent);margin-bottom:10px">Islandia · Día 3</span><div style="font-family:var(--font-heading);font-weight:800;font-size:21px;letter-spacing:-.02em">Día completo por definir</div><p style="margin:6px 0 0;font-size:16px;color:var(--color-neutral-700)">Buen día para el Círculo Dorado, más suave que la Costa Sur, y dejar la noche libre para buscar auroras.</p><div style="font-size:11px;letter-spacing:.12em;color:var(--color-neutral-600);margin-top:10px">LUZ DE 08:54 A 17:35 · TOUR POR RESERVAR</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:96px 1fr;border-bottom:1px solid var(--color-divider);border-left:6px solid var(--color-accent)">
+        <div style="padding:20px 14px;border-right:1px solid var(--color-divider)"><div style="font-family:var(--font-heading);font-weight:800;font-size:28px;line-height:1">22</div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-neutral-600);margin-top:6px">OCT · JUE</div></div>
+        <div style="padding:20px 22px"><span style="display:inline-block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:3px 9px;border:1px solid var(--color-accent);color:var(--color-accent);margin-bottom:10px">Islandia · Día 4</span><div style="font-family:var(--font-heading);font-weight:800;font-size:21px;letter-spacing:-.02em">Último día completo</div><p style="margin:6px 0 0;font-size:16px;color:var(--color-neutral-700)">Día para algo tranquilo y cerca: aguas termales, museos de Reikiavik o la península de Reykjanes.</p><div style="font-size:11px;letter-spacing:.12em;color:var(--color-neutral-600);margin-top:10px">LUZ DE 08:58 A 17:29 · MALETAS LISTAS DE NOCHE</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:96px 1fr;border-bottom:1px solid var(--color-divider);border-left:6px solid var(--color-text)">
+        <div style="padding:20px 14px;border-right:1px solid var(--color-divider)"><div style="font-family:var(--font-heading);font-weight:800;font-size:28px;line-height:1">23</div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-neutral-600);margin-top:6px">OCT · VIE</div></div>
+        <div style="padding:20px 22px"><span style="display:inline-block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:3px 9px;background:var(--color-text);color:var(--color-bg);margin-bottom:10px">Vuelo</span><div style="font-family:var(--font-heading);font-weight:800;font-size:21px;letter-spacing:-.02em">De vuelta a Ámsterdam</div><p style="margin:6px 0 0;font-size:16px;color:var(--color-neutral-700)">Vuelo a las 08:50, salir del hotel como a las 5:15. Llegan a Schiphol a la 13:55 y el hotel del Vondelpark recibe desde las 15:00.</p><div style="font-size:11px;letter-spacing:.12em;color:var(--color-neutral-600);margin-top:10px">08:50 KEF · 13:55 AMS · CHECK-IN 15:00</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:96px 1fr;border-bottom:1px solid var(--color-divider);border-left:6px solid var(--color-neutral-400)">
+        <div style="padding:20px 14px;border-right:1px solid var(--color-divider)"><div style="font-family:var(--font-heading);font-weight:800;font-size:28px;line-height:1">24</div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-neutral-600);margin-top:6px">OCT · SÁB</div></div>
+        <div style="padding:20px 22px"><span style="display:inline-block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:3px 9px;background:var(--color-neutral-200);color:var(--color-neutral-800);margin-bottom:10px">Países Bajos</span><div style="font-family:var(--font-heading);font-weight:800;font-size:21px;letter-spacing:-.02em">Primer día completo en Ámsterdam</div><p style="margin:6px 0 0;font-size:16px;color:var(--color-neutral-700)">El Rijksmuseum y el Museo Van Gogh están a diez minutos caminando del hotel.</p></div>
+      </div>
+      <div style="display:grid;grid-template-columns:96px 1fr;border-bottom:1px solid var(--color-divider);border-left:6px solid var(--color-neutral-400)">
+        <div style="padding:20px 14px;border-right:1px solid var(--color-divider)"><div style="font-family:var(--font-heading);font-weight:800;font-size:28px;line-height:1">25</div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-neutral-600);margin-top:6px">OCT · DOM</div></div>
+        <div style="padding:20px 22px"><span style="display:inline-block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:3px 9px;background:var(--color-neutral-200);color:var(--color-neutral-800);margin-bottom:10px">Países Bajos</span><div style="font-family:var(--font-heading);font-weight:800;font-size:21px;letter-spacing:-.02em">Cambio de horario en Europa</div><p style="margin:6px 0 0;font-size:16px;color:var(--color-neutral-700)">Esta madrugada los relojes se atrasan una hora. La diferencia con Guadalajara pasa de ocho a siete horas.</p><div style="font-size:11px;letter-spacing:.12em;color:var(--color-neutral-600);margin-top:10px">03:00 → 02:00</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:96px 1fr;border-bottom:1px solid var(--color-divider);border-left:6px solid var(--color-neutral-400)">
+        <div style="padding:20px 14px;border-right:1px solid var(--color-divider)"><div style="font-family:var(--font-heading);font-weight:800;font-size:28px;line-height:1">26</div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-neutral-600);margin-top:6px">OCT · LUN</div></div>
+        <div style="padding:20px 22px"><span style="display:inline-block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:3px 9px;background:var(--color-neutral-200);color:var(--color-neutral-800);margin-bottom:10px">Países Bajos</span><div style="font-family:var(--font-heading);font-weight:800;font-size:21px;letter-spacing:-.02em">Día libre</div><p style="margin:6px 0 0;font-size:16px;color:var(--color-neutral-700)">Buen día para salir de la ciudad: Zaanse Schans, Haarlem o Utrecht están a menos de una hora en tren.</p></div>
+      </div>
+      <div style="display:grid;grid-template-columns:96px 1fr;border-bottom:1px solid var(--color-divider);border-left:6px solid var(--color-neutral-400)">
+        <div style="padding:20px 14px;border-right:1px solid var(--color-divider)"><div style="font-family:var(--font-heading);font-weight:800;font-size:28px;line-height:1">27</div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-neutral-600);margin-top:6px">OCT · MAR</div></div>
+        <div style="padding:20px 22px"><span style="display:inline-block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:3px 9px;background:var(--color-neutral-200);color:var(--color-neutral-800);margin-bottom:10px">Países Bajos</span><div style="font-family:var(--font-heading);font-weight:800;font-size:21px;letter-spacing:-.02em">Día libre</div><p style="margin:6px 0 0;font-size:16px;color:var(--color-neutral-700)">Los canales, el Jordaan, la Casa de Ana Frank. Esta última se agota con semanas de anticipación.</p></div>
+      </div>
+      <div style="display:grid;grid-template-columns:96px 1fr;border-bottom:1px solid var(--color-divider);border-left:6px solid var(--color-neutral-400)">
+        <div style="padding:20px 14px;border-right:1px solid var(--color-divider)"><div style="font-family:var(--font-heading);font-weight:800;font-size:28px;line-height:1">28</div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-neutral-600);margin-top:6px">OCT · MIÉ</div></div>
+        <div style="padding:20px 22px"><span style="display:inline-block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:3px 9px;background:var(--color-neutral-200);color:var(--color-neutral-800);margin-bottom:10px">Países Bajos</span><div style="font-family:var(--font-heading);font-weight:800;font-size:21px;letter-spacing:-.02em">Día libre</div><p style="margin:6px 0 0;font-size:16px;color:var(--color-neutral-700)">Espacio para lo pendiente, o un día sin plan en el Vondelpark, cruzando la calle.</p></div>
+      </div>
+      <div style="display:grid;grid-template-columns:96px 1fr;border-bottom:1px solid var(--color-divider);border-left:6px solid var(--color-neutral-400)">
+        <div style="padding:20px 14px;border-right:1px solid var(--color-divider)"><div style="font-family:var(--font-heading);font-weight:800;font-size:28px;line-height:1">29</div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-neutral-600);margin-top:6px">OCT · JUE</div></div>
+        <div style="padding:20px 22px"><span style="display:inline-block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:3px 9px;background:var(--color-neutral-200);color:var(--color-neutral-800);margin-bottom:10px">Países Bajos</span><div style="font-family:var(--font-heading);font-weight:800;font-size:21px;letter-spacing:-.02em">Último día entero</div><p style="margin:6px 0 0;font-size:16px;color:var(--color-neutral-700)">Compras, despedidas y armar maletas con calma. Ojo con el límite de 20 kg del regreso.</p></div>
+      </div>
+      <div style="display:grid;grid-template-columns:96px 1fr;border-bottom:1px solid var(--color-divider);border-left:6px solid var(--color-text)">
+        <div style="padding:20px 14px;border-right:1px solid var(--color-divider)"><div style="font-family:var(--font-heading);font-weight:800;font-size:28px;line-height:1">30</div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-neutral-600);margin-top:6px">OCT · VIE</div></div>
+        <div style="padding:20px 22px"><span style="display:inline-block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:3px 9px;background:var(--color-text);color:var(--color-bg);margin-bottom:10px">Vuelo</span><div style="font-family:var(--font-heading);font-weight:800;font-size:21px;letter-spacing:-.02em">Diez horas de regalo</div><p style="margin:6px 0 0;font-size:16px;color:var(--color-neutral-700)">Dejan el cuarto a las 12:00 pero el avión sale hasta las 22:00. El hotel guarda las maletas.</p><div style="font-size:11px;letter-spacing:.12em;color:var(--color-neutral-600);margin-top:10px">CHECK-OUT 12:00 · VUELO 22:00</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:96px 1fr;border-bottom:2px solid var(--color-divider);border-left:6px solid var(--color-text)">
+        <div style="padding:20px 14px;border-right:1px solid var(--color-divider)"><div style="font-family:var(--font-heading);font-weight:800;font-size:28px;line-height:1">31</div><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-neutral-600);margin-top:6px">OCT · SÁB</div></div>
+        <div style="padding:20px 22px"><span style="display:inline-block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:3px 9px;background:var(--color-text);color:var(--color-bg);margin-bottom:10px">Vuelo</span><div style="font-family:var(--font-heading);font-weight:800;font-size:21px;letter-spacing:-.02em">En casa</div><p style="margin:6px 0 0;font-size:16px;color:var(--color-neutral-700)">Llegan a la Ciudad de México a las 03:05 y conectan a Guadalajara a las 06:05. Tres horas para migración, maletas y aduana.</p><div style="font-size:11px;letter-spacing:.12em;color:var(--color-neutral-600);margin-top:10px">07:40 · ATERRIZAN EN GUADALAJARA</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="hoteles" data-screen-label="Hoteles" style="padding:72px 40px;border-bottom:2px solid var(--color-divider)">
+  <div style="max-width:1180px;margin:0 auto">
+    <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:14px">Dónde dormimos</div>
+    <h2 style="font-size:clamp(28px,4.6vw,48px);letter-spacing:-.03em;margin:0 0 14px">Dos hoteles confirmados</h2>
+    <p style="font-size:18px;max-width:62ch;color:var(--color-neutral-700);margin:0 0 38px">Ambas reservas están a nombre de Sergio Orozco Alatorre, y los dos hoteles piden ver la tarjeta con la que se pagó al momento de llegar.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));border-top:2px solid var(--color-divider);border-left:1px solid var(--color-divider)">
+      <div style="padding:26px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+        <h3 style="margin:0;font-size:24px;letter-spacing:-.02em">Reykjavik Lights Hotel</h3>
+        <div style="font-size:14px;color:var(--color-neutral-600);margin:6px 0 18px">Suðurlandsbraut 12, 108 Reikiavik · +354 513 9000</div>
+        <dl style="display:grid;grid-template-columns:auto 1fr;gap:10px 18px;margin:0;font-size:15px">
+          <dt style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-neutral-600);padding-top:4px">Entra</dt><dd style="margin:0">Lunes 19 de octubre, 15:00</dd>
+          <dt style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-neutral-600);padding-top:4px">Sale</dt><dd style="margin:0">Viernes 23 de octubre, 11:00</dd>
+          <dt style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-neutral-600);padding-top:4px">Cuarto</dt><dd style="margin:0">Triple · 4 noches</dd>
+          <dt style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-neutral-600);padding-top:4px">Incluye</dt><dd style="margin:0">Desayuno, WiFi y estacionamiento</dd>
+          <dt style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-neutral-600);padding-top:4px">Zona</dt><dd style="margin:0">Laugardalur, sobre ruta de tours</dd>
+        </dl>
+      </div>
+      <div style="padding:26px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+        <h3 style="margin:0;font-size:24px;letter-spacing:-.02em">Leonardo Boutique Vondelpark</h3>
+        <div style="font-size:14px;color:var(--color-neutral-600);margin:6px 0 18px">Tesselschadestraat 23, 1054 ET Ámsterdam</div>
+        <dl style="display:grid;grid-template-columns:auto 1fr;gap:10px 18px;margin:0;font-size:15px">
+          <dt style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-neutral-600);padding-top:4px">Entra</dt><dd style="margin:0">Viernes 23 de octubre, 15:00</dd>
+          <dt style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-neutral-600);padding-top:4px">Sale</dt><dd style="margin:0">Viernes 30 de octubre, 12:00</dd>
+          <dt style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-neutral-600);padding-top:4px">Cuarto</dt><dd style="margin:0">Confort · 7 noches</dd>
+          <dt style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-neutral-600);padding-top:4px">Camas</dt><dd style="margin:0">1 twin y 1 individual</dd>
+          <dt style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-neutral-600);padding-top:4px">Zona</dt><dd style="margin:0">Entre el Vondelpark y Leidseplein</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div style="overflow-x:auto;margin-top:40px">
+      <table class="table" style="min-width:520px">
+        <thead><tr><th>Lo que ya está pagado</th><th style="text-align:right">Total</th><th style="text-align:right">Por persona</th></tr></thead>
+        <tbody>
+          <tr><td>Aeroméxico · Guadalajara ida y vuelta</td><td style="text-align:right;font-variant-numeric:tabular-nums">$86,481</td><td style="text-align:right;font-variant-numeric:tabular-nums">$28,827</td></tr>
+          <tr><td>Transavia · Ámsterdam a Reikiavik</td><td style="text-align:right;font-variant-numeric:tabular-nums">≈ $32,300</td><td style="text-align:right;font-variant-numeric:tabular-nums">≈ $10,800</td></tr>
+          <tr><td>Hotel Reikiavik · 4 noches</td><td style="text-align:right;font-variant-numeric:tabular-nums">$15,951</td><td style="text-align:right;font-variant-numeric:tabular-nums">$5,317</td></tr>
+          <tr><td>Hotel Ámsterdam · 7 noches</td><td style="text-align:right;font-variant-numeric:tabular-nums">$47,959</td><td style="text-align:right;font-variant-numeric:tabular-nums">$15,986</td></tr>
+          <tr><td style="font-family:var(--font-heading);font-weight:800;border-bottom:2px solid var(--color-divider)">Suma en pesos</td><td style="text-align:right;font-family:var(--font-heading);font-weight:800;font-variant-numeric:tabular-nums;border-bottom:2px solid var(--color-divider)">≈ $182,700</td><td style="text-align:right;font-family:var(--font-heading);font-weight:800;font-variant-numeric:tabular-nums;color:var(--color-accent);border-bottom:2px solid var(--color-divider)">≈ $60,900</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:14px;font-size:14px;color:var(--color-neutral-600)">Faltan por sumar los tours, la noche del 18 en Ámsterdam, las comidas y los traslados.</p>
+  </div>
+</section>
+
+<section id="lugares" data-screen-label="Lugares" style="padding:72px 40px;border-bottom:2px solid var(--color-divider)">
+  <div style="max-width:1180px;margin:0 auto">
+    <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:14px">Qué vamos a ver</div>
+    <h2 style="font-size:clamp(28px,4.6vw,48px);letter-spacing:-.03em;margin:0 0 14px">Para irlos conociendo antes</h2>
+    <p style="font-size:18px;max-width:56ch;color:var(--color-neutral-700);margin:0 0 34px">Cada lugar tiene su página con cómo llegar, cuánto tiempo lleva y qué cuidar; el otro botón abre videos en YouTube.</p>
+
+    <div style="display:flex;margin:0 0 8px;border:1px solid var(--color-divider);width:max-content;max-width:100%;flex-wrap:wrap">
+      <button onClick="{{ placesIs }}" style="font-family:var(--font-heading);font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;padding:12px 24px;border:0;cursor:pointer;background:{{ pIsBg }};color:{{ pIsFg }}">Islandia</button>
+      <button onClick="{{ placesNl }}" style="font-family:var(--font-heading);font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;padding:12px 24px;border:0;border-left:1px solid var(--color-divider);cursor:pointer;background:{{ pNlBg }};color:{{ pNlFg }}">Países Bajos</button>
+    </div>
+    <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-neutral-600);padding-bottom:10px;border-bottom:2px solid var(--color-divider)">{{ placesCount }}</div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));border-left:1px solid var(--color-divider)">
+      <sc-for list="{{ places }}" as="pl" hint-placeholder-count="9">
+        <div style="padding:22px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);display:flex;flex-direction:column;gap:8px">
+          <div style="font-family:var(--font-heading);font-weight:800;font-size:22px;letter-spacing:-.02em">{{ pl.n }}</div>
+          <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent)">{{ pl.p }}</div>
+          <p style="margin:4px 0 0;font-size:15px;color:var(--color-neutral-700);flex:1">{{ pl.d }}</p>
+          <div style="display:flex;flex-wrap:wrap;gap:16px;margin-top:8px;padding-top:12px;border-top:1px solid var(--color-divider)">
+            <a href="{{ pl.ytUrl }}" target="_blank" rel="noopener" style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--color-accent)">Ver videos →</a>
+            <button onClick="{{ pl.open }}" style="font-family:var(--font-body);font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:0;border:0;background:transparent;color:var(--color-text);cursor:pointer" style-hover="color:var(--color-accent)">Conocer más →</button>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<section id="maleta" data-screen-label="Maleta" style="padding:72px 40px;border-bottom:2px solid var(--color-divider)">
+  <div style="max-width:1180px;margin:0 auto">
+    <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:14px">Qué empacamos</div>
+    <h2 style="font-size:clamp(28px,4.6vw,48px);letter-spacing:-.03em;margin:0 0 14px">La maleta</h2>
+    <p style="font-size:18px;max-width:60ch;color:var(--color-neutral-700);margin:0 0 30px">Islandia y Ámsterdam piden ropa distinta: allá es viento y frío seco, acá es lluvia fina y caminar todo el día sobre adoquín. Lo demás sirve para los dos.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;padding:30px;border:2px solid var(--color-accent);margin-bottom:40px">
+      <div>
+        <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:10px">Límite duro</div>
+        <div style="font-family:var(--font-heading);font-weight:800;font-size:clamp(30px,4vw,46px);line-height:1;letter-spacing:-.03em">Veinte kilos,<br>no veinticinco</div>
+      </div>
+      <div style="font-size:16px;color:var(--color-neutral-800)">
+        <p style="margin:0 0 12px">Aeroméxico permite más peso, pero Transavia solo da 20 kg documentados. Hay que empacar pensando en 20 kg.</p>
+        <p style="margin:0">La maleta de mano de Transavia mide máximo 40 × 30 × 20 cm. Vale la pena confirmarlo con la aerolínea antes de viajar.</p>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));border-top:2px solid var(--color-divider);border-left:1px solid var(--color-divider)">
+      <sc-for list="{{ lists }}" as="lst" hint-placeholder-count="5">
+        <div style="border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+          <dc-import name="PackList" title="{{ lst.title }}" sub="{{ lst.sub }}" items="{{ lst.items }}" progress="{{ lst.progress }}" hint-size="100%,320px"></dc-import>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<section id="ropa" data-screen-label="Ropa" style="padding:72px 40px;border-bottom:2px solid var(--color-divider)">
+  <div style="max-width:1180px;margin:0 auto">
+    <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:14px">Qué comprar, en concreto</div>
+    <h2 style="font-size:clamp(28px,4.6vw,48px);letter-spacing:-.03em;margin:0 0 14px">La ropa, con nombre y apellido</h2>
+    <p style="font-size:18px;max-width:64ch;color:var(--color-neutral-700);margin:0 0 8px">Marcas y modelos que se consiguen en México o por internet, con lo que cambia entre tus 41 y los 68 de tus papás: a ellos les importa más el agarre, el equilibrio y poder ponerse y quitarse las capas sin acrobacias.</p>
+    <p style="font-size:14px;color:var(--color-neutral-600);margin:0 0 30px;max-width:64ch">Los precios son de referencia, en pesos, para tener una idea del orden. Las fotos son del tipo de prenda, no del modelo exacto: para ver ese, el enlace de cada ficha abre las imágenes reales. Si arrastras tu propia foto sobre un recuadro, se queda guardada.</p>
+
+    <div style="display:flex;margin-bottom:26px;border:1px solid var(--color-divider);width:max-content;max-width:100%;flex-wrap:wrap">
+      <button onClick="{{ gearAll }}" style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;padding:12px 20px;border:0;cursor:pointer;background:{{ gearAllBg }};color:{{ gearAllFg }}">Todo</button>
+      <button onClick="{{ gearEss }}" style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;padding:12px 20px;border:0;border-left:1px solid var(--color-divider);cursor:pointer;background:{{ gearEssBg }};color:{{ gearEssFg }}">Solo lo imprescindible</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));border-top:2px solid var(--color-divider);border-left:1px solid var(--color-divider)">
+      <sc-for list="{{ gear }}" as="g" hint-placeholder-count="9">
+        <div style="border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);display:flex;flex-direction:column">
+          <div style="position:relative;height:170px;border-bottom:1px solid var(--color-divider);background:var(--color-neutral-200)">
+            <sc-if value="{{ g.hasImg }}" hint-placeholder-val="{{ true }}">{{ g.imgEl }}</sc-if>
+            <sc-if value="{{ g.noImg }}" hint-placeholder-val="{{ false }}"><image-slot id="{{ g.slot }}" shape="rect" placeholder="{{ g.ph }}"></image-slot></sc-if>
+          </div>
+          <div style="padding:20px;display:flex;flex-direction:column;gap:12px;flex:1">
+            <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
+              <span style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--color-accent)">{{ g.cat }}</span>
+              <span style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:2px 8px;background:{{ g.tagBg }};color:{{ g.tagFg }}">{{ g.tag }}</span>
+            </div>
+            <div style="font-family:var(--font-heading);font-weight:800;font-size:21px;line-height:1.15;letter-spacing:-.02em">{{ g.item }}</div>
+            <p style="margin:0;font-size:15px;line-height:1.55;color:var(--color-neutral-700);text-wrap:pretty">{{ g.why }}</p>
+            <div style="border-top:1px solid var(--color-divider);padding-top:12px">
+              <div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-neutral-600);margin-bottom:5px">Para ti · 41</div>
+              <div style="font-size:15px;color:var(--color-neutral-900);text-wrap:pretty">{{ g.you }}</div>
+            </div>
+            <div style="border-top:1px solid var(--color-divider);padding-top:12px">
+              <div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-neutral-600);margin-bottom:5px">Para tus papás · 68</div>
+              <div style="font-size:15px;color:var(--color-neutral-900);text-wrap:pretty">{{ g.old }}</div>
+            </div>
+            <div style="margin-top:auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-top:14px;border-top:1px solid var(--color-divider)">
+              <span style="font-family:var(--font-heading);font-weight:800;font-size:15px">{{ g.price }}</span>
+              <a href="{{ g.url }}" target="_blank" rel="noopener" style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--color-accent)">Ver el modelo →</a>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:34px;border-top:2px solid var(--color-divider);border-left:1px solid var(--color-divider)">
+      <div style="padding:20px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+        <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:9px">Probar antes, no en Islandia</div>
+        <p style="margin:0;font-size:15px;color:var(--color-neutral-800)">Las botas se compran mínimo un mes antes y se caminan aquí. Estrenar botas el primer día es la forma más segura de arruinar el viaje con ampollas.</p>
+      </div>
+      <div style="padding:20px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+        <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:9px">Tallar con calcetín de lana</div>
+        <p style="margin:0;font-size:15px;color:var(--color-neutral-800)">Toda la ropa de Islandia se prueba con la capa que va debajo puesta. Media talla más en botas y guantes casi siempre es lo correcto.</p>
+      </div>
+      <div style="padding:20px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+        <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:9px">Dónde comprar en México</div>
+        <p style="margin:0;font-size:15px;color:var(--color-neutral-800)">Decathlon para lo básico a buen precio, Innvictus o Martí para Columbia y Merrell, y Amazon MX para lo que no llega a tienda. Reikiavik es carísimo para comprar algo olvidado.</p>
+      </div>
+      <div style="padding:20px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+        <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:9px">Lo que no hay que comprar</div>
+        <p style="margin:0;font-size:15px;color:var(--color-neutral-800)">Nada de mezclilla, nada de algodón pegado al cuerpo y nada de paraguas: se moja, no seca y el viento islandés lo voltea el primer día.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="idioma" data-screen-label="Idioma" style="padding:72px 40px;border-bottom:2px solid var(--color-divider)">
+  <div style="max-width:1180px;margin:0 auto">
+    <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:14px">Cómo hablar</div>
+    <h2 style="font-size:clamp(28px,4.6vw,48px);letter-spacing:-.03em;margin:0 0 14px">Lo mínimo para no quedarse mudos</h2>
+    <p style="font-size:18px;max-width:58ch;color:var(--color-neutral-700);margin:0 0 26px">Todos hablan inglés en los dos países, así que esto no es supervivencia, es cortesía.</p>
+
+    <div style="display:flex;margin-bottom:26px;border:1px solid var(--color-divider);width:max-content;max-width:100%;flex-wrap:wrap">
+      <button onClick="{{ setIs }}" style="font-family:var(--font-heading);font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;padding:12px 24px;border:0;cursor:pointer;background:{{ mIsBg }};color:{{ mIsFg }}">Islandés</button>
+      <button onClick="{{ setNl }}" style="font-family:var(--font-heading);font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;padding:12px 24px;border:0;border-left:1px solid var(--color-divider);cursor:pointer;background:{{ mNlBg }};color:{{ mNlFg }}">Neerlandés</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));border-top:2px solid var(--color-divider);border-left:1px solid var(--color-divider)">
+      <sc-for list="{{ phrases }}" as="ph" hint-placeholder-count="10">
+        <div style="padding:18px 20px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+          <div style="font-family:var(--font-heading);font-weight:800;font-size:20px">{{ ph.t }}</div>
+          <div style="font-size:12px;letter-spacing:.1em;color:var(--color-accent);margin-top:4px">{{ ph.p }}</div>
+          <div style="font-size:15px;color:var(--color-neutral-700);margin-top:6px">{{ ph.es }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<sc-if value="{{ lugarOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:60;background:var(--color-bg);overflow:auto">
+    <div style="position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:12px 40px;background:var(--color-bg);border-bottom:2px solid var(--color-divider)">
+      <div style="font-family:var(--font-heading);font-weight:800;font-size:16px;letter-spacing:-.02em;margin-right:auto">OROZCO&nbsp;VELA <span style="color:var(--color-accent)">/</span> ISLANDIA 26</div>
+      <button onClick="{{ closeLugar }}" style="font-family:var(--font-heading);font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:11px 18px;border:2px solid var(--color-text);background:transparent;color:var(--color-text);cursor:pointer" style-hover="border-color:var(--color-accent);color:var(--color-accent)">← Todos los lugares</button>
+    </div>
+
+    <header style="padding:52px 40px 34px;border-bottom:2px solid var(--color-divider)">
+      <div style="max-width:900px;margin:0 auto">
+        <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:14px">{{ det.country }}</div>
+        <h2 style="font-size:clamp(32px,5.6vw,64px);line-height:.98;letter-spacing:-.04em;margin:0 0 12px;font-family:var(--font-heading);font-weight:800">{{ det.n }}</h2>
+        <div style="font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-neutral-600)">{{ det.p }}</div>
+        <p style="font-size:20px;max-width:60ch;color:var(--color-neutral-800);margin:22px 0 0;text-wrap:pretty">{{ det.d }}</p>
+      </div>
+    </header>
+
+    <section style="padding:40px;border-bottom:2px solid var(--color-divider)">
+      <div style="max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));border-top:2px solid var(--color-divider);border-left:1px solid var(--color-divider)">
+        <div style="padding:22px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+          <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:10px">Por qué vale la pena</div>
+          <p style="margin:0;font-size:16px;color:var(--color-neutral-800);text-wrap:pretty">{{ det.why }}</p>
+        </div>
+        <div style="padding:22px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+          <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:10px">Cómo llegar</div>
+          <p style="margin:0;font-size:16px;color:var(--color-neutral-800);text-wrap:pretty">{{ det.how }}</p>
+        </div>
+        <div style="padding:22px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+          <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:10px">Cuánto tiempo</div>
+          <p style="margin:0;font-size:16px;color:var(--color-neutral-800);text-wrap:pretty">{{ det.time }}</p>
+        </div>
+        <div style="padding:22px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+          <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:10px">Dato curioso</div>
+          <p style="margin:0;font-size:16px;color:var(--color-neutral-800);text-wrap:pretty">{{ det.curio }}</p>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding:40px;border-bottom:2px solid var(--color-divider)">
+      <div style="max-width:900px;margin:0 auto">
+        <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:18px">
+          <h3 style="font-size:clamp(22px,3.2vw,34px);letter-spacing:-.03em;margin:0;font-family:var(--font-heading);font-weight:800">Cómo se ve</h3>
+          <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-neutral-600);margin-left:auto">{{ imgCount }}</div>
+        </div>
+        <div style="position:relative;border:2px solid var(--color-text);background:var(--color-neutral-200);aspect-ratio:16/9;overflow:hidden">
+          {{ imgEl }}
+          <div style="position:absolute;left:0;bottom:0;display:flex">
+            <button onClick="{{ imgPrev }}" aria-label="Anterior" style="font-family:var(--font-heading);font-weight:800;font-size:15px;padding:12px 18px;border:0;background:var(--color-text);color:var(--color-bg);cursor:pointer" style-hover="background:var(--color-accent)">←</button>
+            <button onClick="{{ imgNext }}" aria-label="Siguiente" style="font-family:var(--font-heading);font-weight:800;font-size:15px;padding:12px 18px;border:0;border-left:1px solid var(--color-bg);background:var(--color-text);color:var(--color-bg);cursor:pointer" style-hover="background:var(--color-accent)">→</button>
+          </div>
+          <div style="position:absolute;right:0;bottom:0;padding:8px 12px;background:var(--color-text);color:var(--color-bg);font-size:10px;letter-spacing:.12em;text-transform:uppercase">{{ imgCredit }}</div>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:12px">
+          <sc-for list="{{ imgDots }}" as="dot" hint-placeholder-count="6">
+            <button onClick="{{ dot.go }}" aria-label="Foto" style="width:26px;height:6px;border:0;padding:0;cursor:pointer;background:{{ dot.bg }}"></button>
+          </sc-for>
+        </div>
+        <div style="font-size:13px;color:var(--color-neutral-600);margin-top:12px">{{ imgNote }}</div>
+      </div>
+    </section>
+
+    <section style="padding:40px;border-bottom:2px solid var(--color-divider)">
+      <div style="max-width:900px;margin:0 auto">
+        <h3 style="font-size:clamp(22px,3.2vw,34px);letter-spacing:-.03em;margin:0 0 20px;font-family:var(--font-heading);font-weight:800">Algo de historia</h3>
+        <div style="border-top:2px solid var(--color-divider);padding-top:22px">
+          <sc-for list="{{ detHistory }}" as="par" hint-placeholder-count="2">
+            <p style="margin:0 0 16px;font-size:17px;line-height:1.6;color:var(--color-neutral-800);max-width:70ch;text-wrap:pretty">{{ par.text }}</p>
+          </sc-for>
+          <a href="{{ det.wikiUrl }}" target="_blank" rel="noopener" style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--color-accent)">Seguir leyendo en Wikipedia →</a>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding:40px;border-bottom:2px solid var(--color-divider)">
+      <div style="max-width:900px;margin:0 auto">
+        <h3 style="font-size:clamp(22px,3.2vw,34px);letter-spacing:-.03em;margin:0 0 22px;font-family:var(--font-heading);font-weight:800">Lo que hay que cuidar</h3>
+        <div style="border-top:2px solid var(--color-divider)">
+          <sc-for list="{{ detTips }}" as="tip" hint-placeholder-count="3">
+            <div style="display:grid;grid-template-columns:44px 1fr;gap:12px;padding:18px 0;border-bottom:1px solid var(--color-divider)">
+              <div style="font-family:var(--font-heading);font-weight:800;font-size:15px;color:var(--color-accent);letter-spacing:.08em">{{ tip.num }}</div>
+              <div style="font-size:16px;color:var(--color-neutral-800);text-wrap:pretty">{{ tip.text }}</div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:34px;border-top:2px solid var(--color-divider);border-left:1px solid var(--color-divider)">
+          <div style="padding:22px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+            <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:12px">Qué ponerse</div>
+            <p style="margin:0;font-size:16px;color:var(--color-neutral-800);text-wrap:pretty">{{ det.clothes }}</p>
+          </div>
+          <div style="padding:22px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+            <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:12px">Qué hacer ahí</div>
+            <sc-for list="{{ detTodo }}" as="td" hint-placeholder-count="3">
+              <div style="display:grid;grid-template-columns:14px 1fr;gap:10px;padding:6px 0;font-size:16px;color:var(--color-neutral-800)">
+                <span style="color:var(--color-accent);font-family:var(--font-heading);font-weight:800">·</span>
+                <span>{{ td.text }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:30px">
+          <a href="{{ det.ytUrl }}" target="_blank" rel="noopener" style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;padding:14px 22px;background:var(--color-accent);color:var(--color-bg)">Ver videos del lugar →</a>
+          <a href="{{ det.mapUrl }}" target="_blank" rel="noopener" style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;padding:14px 22px;border:2px solid var(--color-text);color:var(--color-text)" style-hover="border-color:var(--color-accent);color:var(--color-accent)">Verlo en el mapa →</a>
+        </div>
+      </div>
+    </section>
+
+    <sc-if value="{{ hasInfo }}" hint-placeholder-val="{{ false }}">
+      <section style="padding:40px;border-bottom:2px solid var(--color-divider)">
+        <div style="max-width:1180px;margin:0 auto">
+          <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:12px">Infografía</div>
+          <h3 style="font-size:clamp(24px,3.6vw,40px);letter-spacing:-.03em;margin:0 0 10px;font-family:var(--font-heading);font-weight:800">{{ infoTitle }}</h3>
+          <p style="font-size:17px;color:var(--color-neutral-700);margin:0 0 26px;max-width:62ch;text-wrap:pretty">{{ infoSub }}</p>
+          {{ infoImg }}
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ hasLogis }}" hint-placeholder-val="{{ false }}">
+      <section style="padding:40px;border-bottom:2px solid var(--color-divider)">
+        <div style="max-width:900px;margin:0 auto">
+          <h3 style="font-size:clamp(22px,3.2vw,34px);letter-spacing:-.03em;margin:0 0 8px;font-family:var(--font-heading);font-weight:800">La letra chica</h3>
+          <p style="font-size:16px;color:var(--color-neutral-700);margin:0 0 24px;max-width:60ch">Costos, horario, esfuerzo y todo lo que conviene resolver antes de salir del hotel.</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));border-top:2px solid var(--color-divider);border-left:1px solid var(--color-divider)">
+            <sc-for list="{{ detLogis }}" as="lg" hint-placeholder-count="8">
+              <div style="padding:20px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+                <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:9px">{{ lg.label }}</div>
+                <p style="margin:0;font-size:15px;line-height:1.55;color:var(--color-neutral-800);text-wrap:pretty">{{ lg.text }}</p>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <section style="padding:40px 40px 72px">
+      <div style="max-width:900px;margin:0 auto">
+        <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:18px">Otros lugares del mismo país</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));border-top:2px solid var(--color-divider);border-left:1px solid var(--color-divider)">
+          <sc-for list="{{ detSiblings }}" as="sb" hint-placeholder-count="6">
+            <button onClick="{{ sb.go }}" style="padding:18px 20px;border:0;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);background:transparent;color:var(--color-text);display:block;width:100%;text-align:left;cursor:pointer;font-family:var(--font-body)" style-hover="background:var(--color-accent-100)">
+              <div style="font-family:var(--font-heading);font-weight:800;font-size:17px;letter-spacing:-.01em">{{ sb.n }}</div>
+              <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent);margin-top:5px">{{ sb.p }}</div>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+  </div>
+</sc-if>
+
+<section data-screen-label="Datos" style="padding:72px 40px;border-bottom:2px solid var(--color-divider)">
+  <div style="max-width:1180px;margin:0 auto">
+    <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:14px">Cómo funcionan las cosas allá</div>
+    <h2 style="font-size:clamp(28px,4.6vw,48px);letter-spacing:-.03em;margin:0 0 14px">Lo que conviene saber de antemano</h2>
+    <p style="font-size:18px;max-width:56ch;color:var(--color-neutral-700);margin:0 0 34px">Cosas chicas que se vuelven grandes cuando uno llega sin saberlas.</p>
+    <div style="display:flex;margin:0 0 26px;border:1px solid var(--color-divider);width:max-content;max-width:100%;flex-wrap:wrap">
+      <button onClick="{{ factsIs }}" style="font-family:var(--font-heading);font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;padding:12px 24px;border:0;cursor:pointer;background:{{ fIsBg }};color:{{ fIsFg }}">Islandia</button>
+      <button onClick="{{ factsNl }}" style="font-family:var(--font-heading);font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;padding:12px 24px;border:0;border-left:1px solid var(--color-divider);cursor:pointer;background:{{ fNlBg }};color:{{ fNlFg }}">Países Bajos</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));border-top:2px solid var(--color-divider);border-left:1px solid var(--color-divider)">
+      <sc-for list="{{ facts }}" as="f" hint-placeholder-count="8">
+        <div style="padding:24px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+          <div style="font-family:var(--font-heading);font-weight:800;font-size:38px;line-height:1;color:var(--color-accent);letter-spacing:-.03em">{{ f.n }}</div>
+          <div style="font-family:var(--font-heading);font-weight:800;font-size:16px;margin:12px 0 6px">{{ f.t }}</div>
+          <p style="margin:0;font-size:15px;color:var(--color-neutral-700)">{{ f.b }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<footer style="background:var(--color-text);color:var(--color-bg);padding:64px 40px 48px">
+  <div style="max-width:1180px;margin:0 auto">
+    <h3 style="margin:0 0 28px;font-size:clamp(26px,3.6vw,42px);letter-spacing:-.03em">Por si algo pasa</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));border-top:2px solid rgba(243,242,242,.35);border-left:1px solid rgba(243,242,242,.25)">
+      <div style="padding:20px;border-right:1px solid rgba(243,242,242,.25);border-bottom:1px solid rgba(243,242,242,.25)"><div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-400)">Emergencias</div><div style="font-family:var(--font-heading);font-weight:800;font-size:30px;margin-top:8px"><a href="tel:112" style="color:var(--color-bg);text-decoration:none">112</a></div><div style="font-size:13px;color:var(--color-neutral-500);margin-top:8px">Funciona igual en Islandia y en Países Bajos, y es gratis.</div></div>
+      <div style="padding:20px;border-right:1px solid rgba(243,242,242,.25);border-bottom:1px solid rgba(243,242,242,.25)"><div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-400)">Hotel Reikiavik</div><div style="font-family:var(--font-heading);font-weight:800;font-size:20px;margin-top:8px"><a href="tel:+3545139000" style="color:var(--color-bg);text-decoration:none">+354 513 9000</a></div><div style="font-size:13px;color:var(--color-neutral-500);margin-top:8px">Reykjavik Lights, Suðurlandsbraut 12</div></div>
+      <div style="padding:20px;border-right:1px solid rgba(243,242,242,.25);border-bottom:1px solid rgba(243,242,242,.25)"><div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-400)">Aeroméxico</div><div style="font-family:var(--font-heading);font-weight:800;font-size:20px;margin-top:8px"><a href="tel:+525551334000" style="color:var(--color-bg);text-decoration:none">+52 55 5133 4000</a></div><div style="font-size:13px;color:var(--color-neutral-500);margin-top:8px">Para cambios y aclaraciones de los vuelos</div></div>
+      <div style="padding:20px;border-right:1px solid rgba(243,242,242,.25);border-bottom:1px solid rgba(243,242,242,.25)"><div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-400)">Embajada de México</div><div style="font-family:var(--font-heading);font-weight:800;font-size:20px;margin-top:8px">La Haya</div><div style="font-size:13px;color:var(--color-neutral-500);margin-top:8px">Cubre Países Bajos e Islandia.</div></div>
+    </div>
+    <p style="margin:28px 0 0;font-size:13px;color:var(--color-neutral-500);max-width:80ch">Esta página se hizo para la familia y a propósito no incluye números de boleto, viajero frecuente, fechas de nacimiento, teléfonos personales ni datos de tarjetas. Los horarios pueden cambiar: siempre hay que confirmarlos con la aerolínea antes de salir al aeropuerto.</p>
+  </div>
+</footer>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;mode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;is&quot;,&quot;nl&quot;],&quot;default&quot;:&quot;is&quot;,&quot;tsType&quot;:&quot;\&quot;is\&quot; | \&quot;nl\&quot;&quot;,&quot;section&quot;:&quot;Modo&quot;}}">
+class Component extends DCLogic {
+  state = { d: "—", h: "--", m: "--", s: "--", gdl: "--:--", kef: "--:--", ams: "--:--", tab: "isl", done: {} };
+
+  GEAR = [
+    { slot:"gear-shell", cat:"Capa exterior", ess:true, item:"Chamarra impermeable con capucha",
+      why:"Es la pieza que decide el viaje: en Islandia casi nunca hace un frío insoportable, pero el viento con lluvia atraviesa cualquier abrigo que no sea impermeable de verdad.",
+      you:"Columbia Watertight II o Ampli-Dry, o la Quechua MH500 de Decathlon. Ligeras, se guardan en la mochila y sirven de rompevientos en Ámsterdam.",
+      old:"Mejor una 3 en 1 tipo Columbia Whirlibird IV o Bugaboo II: el forro se desabotona y se quita, así traen un solo abrigo para los dos países y no cargan dos.",
+      price:"$1,800 – $4,500", tag:"Imprescindible", q:"Columbia Whirlibird IV Interchange chamarra" },
+    { slot:"gear-mid", cat:"Capa media", ess:true, item:"Forro polar o chaleco de plumas",
+      why:"Es el termostato: se pone y se quita según el día sin tener que cambiarse de abrigo.",
+      you:"Forro polar Columbia Steens Mountain o Decathlon MH120, unos 300 g y aguanta todo.",
+      old:"Chaleco de plumas ligero Uniqlo Ultra Light Down: pesa nada, se comprime del tamaño de un puño y les calienta el tronco sin estorbarles los brazos.",
+      price:"$700 – $1,500", tag:"Imprescindible", q:"Columbia Steens Mountain fleece" },
+    { slot:"gear-base", cat:"Capa base", ess:true, item:"Térmica de lana merino",
+      why:"Va pegada al cuerpo y es lo que evita el frío húmedo. La lana sigue calentando aunque se moje; el algodón hace justo lo contrario.",
+      you:"Icebreaker 200 Oasis o Smartwool Classic, dos juegos. Se pueden usar tres días seguidos sin oler.",
+      old:"Uniqlo Heattech Extra Warm si la lana les pica: mucho más barata y suficiente para ellos, que van a estar más tiempo en el camión que caminando.",
+      price:"$400 – $2,000", tag:"Imprescindible", q:"Icebreaker 200 Oasis base layer" },
+    { slot:"gear-boots", cat:"Calzado", ess:true, item:"Botas impermeables de media caña",
+      why:"Grava suelta, roca volcánica filosa y agua por todos lados. La caña media sostiene el tobillo, que es exactamente lo que se tuerce en Reynisfjara o Fjaðrárgljúfur.",
+      you:"Merrell Moab 3 Mid GTX o Salomon X Ultra 4 Mid GTX. Cómodas desde el primer día, casi no hay que romperlas.",
+      old:"Keen Targhee IV Mid WP: horma ancha, agujetas fáciles de jalar y buena base. Si tienen juanetes o pie ancho, es la que menos molesta.",
+      price:"$2,500 – $4,500", tag:"Imprescindible", q:"Merrell Moab 3 Mid GTX" },
+    { slot:"gear-spikes", cat:"Calzado", ess:true, item:"Crampones ligeros para caminar",
+      why:"En octubre hay hielo negro en los estacionamientos y en los escalones de las cascadas. Es lo más barato que pueden comprar y lo que más caídas evita.",
+      you:"Kahtoola MICROspikes si van a caminar en serio, o Yaktrax Walk para el diario.",
+      old:"Yaktrax Walk, sin discusión. Se ponen sobre el zapato en veinte segundos y les cambian por completo la seguridad al pisar.",
+      price:"$450 – $1,600", tag:"Imprescindible", q:"Yaktrax Walk crampones" },
+    { slot:"gear-socks", cat:"Calcetines", ess:true, item:"Calcetines de lana, no de algodón",
+      why:"Sirven de aislante y de amortiguación. Con tres pares buenos se sobrevive quince días lavando en el hotel.",
+      you:"Darn Tough Hiker o Smartwool Hike Light Crew.",
+      old:"Los mismos, pero de compresión suave si se les hinchan los pies en vuelos largos: el de México a Ámsterdam son diez horas.",
+      price:"$350 – $700 el par", tag:"Imprescindible", q:"Smartwool Hike Light Crew calcetines" },
+    { slot:"gear-pants", cat:"Pantalón", ess:true, item:"Pantalón de caminata + sobrepantalón impermeable",
+      why:"El sobrepantalón se pone encima cuando arrecia y se quita cuando para. La mezclilla mojada tarda un día entero en secar.",
+      you:"Decathlon NH500 o Columbia Silver Ridge de base, y encima el Quechua MH500 impermeable.",
+      old:"Que el sobrepantalón tenga cierre lateral largo: se lo ponen sin quitarse las botas ni tener que sentarse en el piso.",
+      price:"$700 – $1,800", tag:"Imprescindible", q:"Quechua MH500 pantalon impermeable" },
+    { slot:"gear-gloves", cat:"Manos y cabeza", ess:true, item:"Guantes impermeables y gorro de lana",
+      why:"El viento en Reynisfjara y en Jökulsárlón te congela las manos en dos minutos. Con dedo táctil no hay que descubrirse para tomar la foto.",
+      you:"The North Face Etip impermeables o los SH500 de Decathlon.",
+      old:"Guantes con puño largo que cubra la muñeca y un gorro que tape orejas por completo; a esa edad el frío se siente primero ahí.",
+      price:"$400 – $1,200", tag:"Imprescindible", q:"guantes impermeables tactiles trekking" },
+    { slot:"gear-pole", cat:"Estabilidad", ess:false, item:"Bastón plegable de trekking",
+      why:"En grava suelta y en escalones mojados es un tercer punto de apoyo. Se dobla y cabe en la maleta documentada.",
+      you:"Solo si vas a subir los 527 escalones de Skógafoss o caminar el glaciar.",
+      old:"Uno cada quien, Black Diamond Trail Back o el MT500 de Decathlon. Es la diferencia entre bajar tranquilos o ir agarrados de alguien.",
+      price:"$600 – $1,900", tag:"Muy recomendable", q:"baston trekking plegable Decathlon MT500" },
+    { slot:"gear-shoes-nl", cat:"Ámsterdam", ess:false, item:"Zapato cómodo e impermeable de ciudad",
+      why:"En Ámsterdam se caminan diez o doce kilómetros diarios sobre adoquín mojado, y las botas de montaña ahí son incómodas y calurosas.",
+      you:"Un tenis impermeable tipo Hoka Transport GTX o Adidas Terrex con GTX.",
+      old:"Ecco Soft 7 GTX o Skechers Arch Fit impermeables: suela blanda, buen arco y se ponen sin agacharse mucho.",
+      price:"$1,800 – $4,000", tag:"Muy recomendable", q:"Ecco Soft 7 GTX" },
+    { slot:"gear-rain-nl", cat:"Ámsterdam", ess:false, item:"Impermeable ligero con capucha",
+      why:"Allá la lluvia es fina y constante, no chubasco. Un impermeable delgado se dobla en la mochila y se saca diez veces al día.",
+      you:"La misma chamarra de Islandia sin el forro funciona perfecto.",
+      old:"Una gabardina impermeable tipo Rains, más fácil de poner encima del suéter que una chamarra deportiva ajustada.",
+      price:"$900 – $2,800", tag:"Opcional", q:"Rains long jacket impermeable" },
+    { slot:"gear-spa", cat:"Aguas termales", ess:false, item:"Traje de baño, sandalias y toalla de microfibra",
+      why:"En Blue Lagoon y Sky Lagoon rentan toalla, pero cara. El piso mojado entre el vestidor y el agua es donde más gente se resbala.",
+      you:"Traje de baño oscuro (el agua mineral destiñe los claros) y toalla de microfibra que seca en horas.",
+      old:"Sandalias antiderrapantes con talón, no chanclas de dedo, y una bata ligera para el trayecto del vestidor al agua.",
+      price:"$400 – $1,200", tag:"Muy recomendable", q:"toalla microfibra viaje sandalias antiderrapantes" }
+  ];
+
+  INFO_OF = { "circulo-dorado":"geo", "aguas-termales":"geo", "auroras":"aur",
+    "solheimajokull":"gla", "jokulsarlon":"gla", "reynisfjara":"neg", "dyrholaey":"neg",
+    "reykjanes":"vol", "silfra":"tec", "fjadrargljufur":"gla" };
+
+  INFO = {
+    geo: { t: "Cómo hierve la isla", s: "Un géiser no es un chorro caprichoso: es una olla exprés natural que se destapa cada pocos minutos.", img: "infografias/geotermia.jpg", b: [
+      { title: "Mecanismo de un géiser", dia: "geyser", rows: [
+        { n: "01", t: "Infiltración", d: "El agua de lluvia y de deshielo se cuela por las grietas hasta un depósito a cientos de metros de profundidad." },
+        { n: "02", t: "Sobrecalentamiento", d: "El magma cercano calienta ese depósito muy por encima de los 100 °C." },
+        { n: "03", t: "Presurización", d: "El peso de la columna de agua de encima impide que hierva. La presión se acumula." },
+        { n: "04", t: "Erupción", d: "Una burbuja rompe el equilibrio, el vapor se expande de golpe y expulsa todo hacia arriba." }] },
+      { title: "De la superficie al magma", bands: [
+        { at: "0 m", color: "#c9c2b6", label: "Cráter y geyserita", note: "Costra blanca de sílice depositada por el agua." },
+        { at: "−50 m", color: "#7fb7c9", label: "Conducto", d: "", note: "Chimenea estrecha donde se traba la presión." },
+        { at: "−300 m", color: "#4b7f96", label: "Depósito de agua", note: "Agua líquida a más de 200 °C, sostenida por la presión." },
+        { at: "−2 km", color: "#c2451f", label: "Roca y magma", note: "La fuente de calor. En Islandia está insólitamente cerca." }] },
+      { title: "Otras formas del mismo calor", rows: [
+        { n: "A", t: "Fumarolas", d: "Emisión continua de vapor seco y gases; el olor a huevo podrido es azufre." },
+        { n: "B", t: "Ollas de lodo", d: "Barro hirviendo y burbujeante donde el vapor sube por suelo arcilloso." },
+        { n: "C", t: "Aguas termales", d: "Lagunas templadas por convección; es lo que se aprovecha en Sky y Blue Lagoon." },
+        { n: "D", t: "Vapor seco", d: "Columnas de vapor que salen directas de la roca, sin agua acumulada." }] },
+      { title: "Para qué les sirve", dia: "power", rows: [
+        { n: "01", t: "Electricidad", d: "El vapor mueve turbinas en Hellisheiði y Nesjavellir; casi toda la luz del país es limpia." },
+        { n: "02", t: "Calefacción", d: "El agua caliente se reparte por tubería a las casas de Reikiavik." },
+        { n: "03", t: "La llave del hotel", d: "El agua caliente huele a azufre porque viene directo del subsuelo; la fría es purísima." },
+        { n: "04", t: "Sílice", d: "El agua lechosa de la laguna es sílice disuelta, lo mismo que forma la costra blanca de los géiseres." }] }] },
+
+    aur: { t: "Por qué se enciende el cielo", s: "La aurora es una colisión: partículas del Sol contra los gases de nuestra atmósfera.", img: "infografias/auroras.jpg", b: [
+      { title: "Mecanismo de formación", dia: "aurora", rows: [
+        { n: "01", t: "Origen solar", d: "El Sol lanza viento solar: partículas cargadas que viajan dos o tres días hasta la Tierra." },
+        { n: "02", t: "Captura magnética", d: "El campo magnético terrestre las desvía y las conduce hacia los polos." },
+        { n: "03", t: "Colisión", d: "Al bajar chocan contra el oxígeno y el nitrógeno de la alta atmósfera." },
+        { n: "04", t: "Luz", d: "El gas se excita, se relaja y devuelve esa energía en forma de luz de color." }] },
+      { title: "El color depende de la altura", bands: [
+        { at: "~250 km", color: "#c0392b", label: "Rojo · oxígeno", note: "El más raro: oxígeno muy alto y muy poco denso." },
+        { at: "~150 km", color: "#8e44ad", label: "Púrpura · nitrógeno", note: "Aparece en los bordes superiores de las cortinas." },
+        { at: "~100 km", color: "#27ae60", label: "Verde · oxígeno", note: "El clásico, el que sale en todas las fotos." },
+        { at: "<100 km", color: "#2f5fa8", label: "Azul · nitrógeno", note: "Solo en tormentas fuertes, en la base de la cortina." }] },
+      { title: "Cuándo salir a buscarla", rows: [
+        { n: "01", t: "Temporada", d: "De septiembre a abril. Octubre ya tiene noches largas y todavía caminos abiertos." },
+        { n: "02", t: "Hora", d: "Entre las 21:00 y las 02:00 es cuando más suele encenderse." },
+        { n: "03", t: "Cielo", d: "Necesita estar despejado: la nube tapa la aurora aunque el índice esté alto." },
+        { n: "04", t: "Oscuridad", d: "Salir de Reikiavik. Veinte minutos de coche cambian por completo lo que se ve." }] },
+      { title: "Cómo fotografiarla", rows: [
+        { n: "01", t: "Trípode", d: "Sin trípode no hay foto: la exposición es de varios segundos." },
+        { n: "02", t: "Ajustes", d: "ISO 1600–3200, diafragma lo más abierto posible, entre 5 y 15 segundos." },
+        { n: "03", t: "Enfoque", d: "Manual al infinito, hecho de día o sobre una estrella brillante." },
+        { n: "04", t: "Índice KP", d: "Del 0 al 9. Con KP 3 ya se ve desde Islandia; con KP 6 se ve espectacular." }] }] },
+
+    gla: { t: "Cómo se hace un glaciar", s: "Nieve que nunca alcanza a derretirse, comprimida durante siglos hasta volverse hielo que fluye.", img: "infografias/glaciares.jpg", b: [
+      { title: "De la nieve al hielo", dia: "glacier", rows: [
+        { n: "01", t: "Acumulación", d: "Cae más nieve en invierno de la que se derrite en verano." },
+        { n: "02", t: "Firn", d: "La nieve enterrada pierde aire y se compacta en un grano áspero llamado firn." },
+        { n: "03", t: "Hielo glaciar", d: "Bajo su propio peso el firn se vuelve hielo denso, casi sin burbujas." },
+        { n: "04", t: "Flujo", d: "A partir de cierto grosor el hielo se deforma y avanza pendiente abajo, como miel muy lenta." }] },
+      { title: "Corte del glaciar", bands: [
+        { at: "Arriba", color: "#ffffff", label: "Nieve fresca", note: "La capa del último invierno." },
+        { at: "", color: "#dbe9f0", label: "Firn", note: "Nieve vieja, medio compactada." },
+        { at: "", color: "#8fd0e6", label: "Hielo glaciar", note: "Azul porque el hielo denso absorbe el rojo de la luz." },
+        { at: "Abajo", color: "#6b5744", label: "Roca madre", note: "El lecho que el hielo va puliendo y arrastrando." }] },
+      { title: "Lo que se ve en la superficie", rows: [
+        { n: "A", t: "Grietas", d: "Roturas por tensión donde el hielo se estira. Son la razón de no subir sin guía." },
+        { n: "B", t: "Seracs", d: "Torres de hielo inestables entre grietas; pueden colapsar sin aviso." },
+        { n: "C", t: "Morrenas", d: "Franjas de roca molida que el glaciar acarrea y deja a los lados." },
+        { n: "D", t: "Molinos", d: "Pozos verticales por donde el agua de deshielo se hunde hasta el fondo." }] },
+      { title: "Cuevas de hielo y retroceso", dia: "cave", rows: [
+        { n: "01", t: "Se abren en verano", d: "El agua de deshielo excava túneles por dentro del hielo." },
+        { n: "02", t: "Se visitan en invierno", d: "Cuando el flujo se congela, el túnel queda vacío y estable para entrar." },
+        { n: "03", t: "El azul", d: "Es hielo sin burbujas: tan comprimido que solo deja pasar el azul." },
+        { n: "04", t: "Retroceso", d: "Sólheimajökull pierde decenas de metros al año; la laguna que dejó atrás crece cada temporada." }] }] },
+
+    neg: { t: "Por qué la arena es negra", s: "No es arena teñida: es lava molida por el mar, en una costa que la tectónica sigue fabricando.", img: "infografias/arena-negra.jpg", b: [
+      { title: "Origen de la arena", dia: "plates", rows: [
+        { n: "01", t: "Lava basáltica", d: "Rica en hierro y magnesio, y por eso oscura casi hasta el negro." },
+        { n: "02", t: "Enfriamiento brusco", d: "Al tocar el agua se rompe en fragmentos vidriosos." },
+        { n: "03", t: "Erosión", d: "Las olas trituran esos fragmentos durante siglos." },
+        { n: "04", t: "Arena", d: "Queda basalto, obsidiana y minerales magnéticos molidos a grano fino." }] },
+      { title: "Anatomía de la costa", dia: "columns", rows: [
+        { n: "A", t: "Columnas de basalto", d: "La lava, al enfriarse pareja, se contrae y se parte en prismas hexagonales." },
+        { n: "B", t: "Hálsanefshellir", d: "La cueva abierta en el acantilado de columnas de Reynisfjara." },
+        { n: "C", t: "Reynisdrangar", d: "Los farallones del mar: roca más dura que resistió cuando el resto se erosionó." },
+        { n: "D", t: "Dyrhólaey", d: "El arco de roca perforado por el oleaje, con vista a toda la playa negra." }] },
+      { title: "Islandia se está partiendo", bands: [
+        { at: "Oeste", color: "#3b6ea5", label: "Placa norteamericana", note: "Se aleja unos 2 cm al año." },
+        { at: "Centro", color: "#c2451f", label: "Zona de rift", note: "La corteza se separa y sube magma por la fisura." },
+        { at: "Este", color: "#3b6ea5", label: "Placa euroasiática", note: "Se va en la dirección contraria." },
+        { at: "", color: "#4b7f96", label: "Dorsal mesoatlántica", note: "La costura del Atlántico; Islandia es el único tramo que sale del agua." }] },
+      { title: "El peligro real", rows: [
+        { n: "01", t: "Olas sneaker", d: "Sin aviso, una ola sube treinta metros más que las anteriores." },
+        { n: "02", t: "Nunca de espaldas", d: "Ni para la foto. Ahí es donde ha muerto gente en Reynisfjara." },
+        { n: "03", t: "Distancia", d: "Mantenerse arriba de la línea de espuma mojada de la arena." },
+        { n: "04", t: "Semáforo", d: "Hay un tablero de riesgo en el acceso: hay que leerlo antes de bajar." }] }] },
+
+    vol: { t: "Dos motores bajo la isla", s: "Islandia existe porque una dorsal oceánica y un punto caliente coinciden en el mismo sitio.", img: "infografias/volcanes.jpg", b: [
+      { title: "Por qué hay tanto volcán", dia: "volcano", rows: [
+        { n: "01", t: "Dorsal mesoatlántica", d: "Dos placas que se separan dejan subir magma por la grieta." },
+        { n: "02", t: "Pluma mantélica", d: "Encima, un chorro de material caliente desde muy adentro del manto." },
+        { n: "03", t: "Coincidencia", d: "Las dos cosas juntas producen mucho más magma del normal." },
+        { n: "04", t: "La isla", d: "Capa sobre capa de lava acumulada hasta salir del mar." }] },
+      { title: "Corte de la corteza", bands: [
+        { at: "0 km", color: "#5c6b52", label: "Superficie", note: "Campos de lava, musgo y cráteres." },
+        { at: "−3 km", color: "#6b5744", label: "Corteza fracturada", note: "Por donde el magma encuentra camino." },
+        { at: "−10 km", color: "#e07b39", label: "Cámara magmática", note: "Donde se acumula antes de una erupción." },
+        { at: "−40 km", color: "#c2451f", label: "Manto", note: "El origen del calor de toda la isla." }] },
+      { title: "Dos tipos de erupción", rows: [
+        { n: "A", t: "Fisural", d: "Lava fluida que brota de una grieta larga, como en Fagradalsfjall. Espectacular y relativamente mansa." },
+        { n: "B", t: "Explosiva", d: "Lava viscosa que atrapa gas y revienta con columna de ceniza, como el Eyjafjallajökull en 2010." },
+        { n: "C", t: "Bajo glaciar", d: "Si la erupción es bajo hielo, funde el glaciar y provoca una inundación repentina: jökulhlaup." },
+        { n: "D", t: "Qué implica", d: "Se cierran carreteras por zona, no el país entero. Se avisa con días de anticipación." }] },
+      { title: "Lo que deja atrás", rows: [
+        { n: "01", t: "Tierra nueva", d: "Los flujos de lava rellenan valles y alargan la costa." },
+        { n: "02", t: "Suelo fértil", d: "La ceniza descompuesta libera fósforo y potasio." },
+        { n: "03", t: "Arena negra", d: "Todo lo que el mar muele acaba en las playas del sur." },
+        { n: "04", t: "Calor", d: "El mismo sistema que alimenta los géiseres y calienta las casas." }] }] },
+
+    tec: { t: "Nadar entre dos continentes", s: "Silfra es la grieta llena de agua de deshielo justo donde se separan las dos placas.", img: "infografias/arena-negra.jpg", b: [
+      { title: "Qué estás viendo", dia: "plates", rows: [
+        { n: "01", t: "La grieta", d: "Una fisura abierta por la separación de las placas norteamericana y euroasiática." },
+        { n: "02", t: "El agua", d: "Deshielo del glaciar Langjökull filtrado durante décadas por roca volcánica." },
+        { n: "03", t: "La visibilidad", d: "Más de cien metros: es de las aguas más transparentes del planeta." },
+        { n: "04", t: "La temperatura", d: "Entre 2 y 4 °C todo el año; por eso se entra con traje seco." }] },
+      { title: "Cómo se separa", bands: [
+        { at: "Oeste", color: "#3b6ea5", label: "Placa norteamericana", note: "Se aleja unos 2 cm al año." },
+        { at: "Centro", color: "#4b7f96", label: "Silfra", note: "La fisura inundada por donde se bucea." },
+        { at: "Este", color: "#3b6ea5", label: "Placa euroasiática", note: "Avanza en sentido contrario." },
+        { at: "Abajo", color: "#c2451f", label: "Magma", note: "Lo que sube para rellenar el hueco que dejan." }] }] }
+  };
+
+  GEAR_IMG = {
+    "gear-shell":"https://commons.wikimedia.org/wiki/Special:FilePath/Windbreaker_Jacket%2C_Hood_Outside_Transparency.png?width=800",
+    "gear-mid":"https://commons.wikimedia.org/wiki/Special:FilePath/The_North_Face_Arctic_Swirl_Down_Parka.jpg?width=800",
+    "gear-boots":"https://commons.wikimedia.org/wiki/Special:FilePath/Wanderlust.jpg?width=800",
+    "gear-spikes":"https://commons.wikimedia.org/wiki/Special:FilePath/Crampon.JPG?width=800",
+    "gear-socks":"https://commons.wikimedia.org/wiki/Special:FilePath/Socken_farbig.jpeg?width=800",
+    "gear-gloves":"https://commons.wikimedia.org/wiki/Special:FilePath/Gloves1.jpg?width=800",
+    "gear-pole":"https://commons.wikimedia.org/wiki/Special:FilePath/TrekkingPolesCarbonWoman.jpg?width=800",
+    "gear-shoes-nl":"https://commons.wikimedia.org/wiki/Special:FilePath/Air_Jordan_1_Banned.jpg?width=800",
+    "gear-rain-nl":"https://commons.wikimedia.org/wiki/Special:FilePath/Yellow_Raincoat.jpg?width=800",
+    "gear-spa":"https://commons.wikimedia.org/wiki/Special:FilePath/Blue_lagoon_iceland.jpg?width=800"
+  };
+
+  LISTS = [
+    { id: "ropa", title: "Ropa para Islandia", sub: "Por capas · nada de mezclilla", items: [
+      "Chamarra impermeable y rompevientos", "Pantalón impermeable para encima", "Capa térmica de lana o sintética",
+      "Suéter grueso o polar", "Calcetines de lana, varios pares", "Gorro que cubra las orejas", "Guantes y bufanda",
+      "Botas de montaña con soporte de tobillo", "Traje de baño para las aguas termales", "Lentes de sol y bloqueador"] },
+    { id: "ropanl", title: "Ropa para Ámsterdam", sub: "Menos frío, más lluvia fina y viento", items: [
+      "Impermeable ligero con capucha, el paraguas se voltea con el viento",
+      "Zapatos cómodos y cerrados: son días enteros de adoquín mojado",
+      "Un segundo par de zapatos, por si el primero se moja",
+      "Capas delgadas: dentro de los museos y el tren hace calor",
+      "Suéter mediano en vez de la parka de Islandia",
+      "Algo un poco más presentable para una cena o un concierto",
+      "Mochila chica que cierre bien y se cargue al frente en el centro",
+      "Bolsa de tela plegable para el mercado y los supermercados",
+      "Candado y funda de lluvia si se rentan bicicletas"] },
+    { id: "docs", title: "Documentos", sub: "Todo en la mochila de mano", items: [
+      "Pasaporte vigente con al menos 6 meses", "Copia del pasaporte, aparte del original", "Pases de abordar impresos",
+      "Confirmaciones de hotel impresas", "Tarjeta con la que se pagaron los hoteles", "Póliza del seguro de viaje",
+      "Autorización ETIAS, si ya es obligatoria"] },
+    { id: "tec", title: "Aparatos", sub: "Enchufe tipo F · 230 voltios", items: [
+      "Adaptador de enchufe europeo, uno por persona", "Cargadores de celular", "Batería portátil, en la mochila de mano",
+      "Cámara y memorias", "Audífonos para el vuelo largo", "Mapas descargados sin internet"] },
+    { id: "salud", title: "Botiquín", sub: "Medicinas diarias siempre en la mano", items: [
+      "Medicamentos de uso diario, en su caja original", "Receta del médico o carta con los nombres genéricos",
+      "Días extra de medicina, por si hay retrasos", "Analgésico de cabecera", "Algo para el mareo del avión y los caminos con curvas",
+      "Antidiarreico y sales de rehidratación", "Curitas para ampollas y vendas", "Crema para labios partidos, el viento reseca", "Termómetro chico"] },
+    { id: "antes", title: "Antes de salir de casa", sub: "Pendientes de las próximas semanas", items: [
+      "Reservar el hotel de la noche del 18 en Schiphol", "Escoger y reservar los tours de Islandia",
+      "Comprar boletos de museos de Ámsterdam", "Avisar a los bancos que vamos a viajar",
+      "Confirmar con el hotel que el cuarto es para tres", "Contratar el Flybus de Keflavík al hotel",
+      "Revisar cobertura del seguro y roaming"] }
+  ];
+
+  KEY = "viaje26:checklist";
+  MODE_KEY = "viaje26:mode";
+
+  THEMES = {
+    is: { bg:"#eef4f6", text:"#0f1e28", divider:"#c9d8de", accent:"#0d8f8c", a100:"#dff1f0", a400:"#4dbfb8", a700:"#0a6260",
+          n200:"#dde8ec", n400:"#a7bcc4", n500:"#7f9aa4", n600:"#5d7c88", n700:"#3f5f6c", n800:"#2b4b57",
+          pbg:"#05101b", pcard:"#0a1a26", pline:"#1c3b4d", pice:"#8fdfef", pdim:"#6f96a8", pfg:"#eaf7fb" },
+    nl: { bg:"#f7f2e5", text:"#17203f", divider:"#d9cdb4", accent:"#c2451f", a100:"#f7e3d7", a400:"#e08a5c", a700:"#8d2f14",
+          n200:"#ebe3cf", n400:"#b5a98d", n500:"#8d8168", n600:"#6d6149", n700:"#574c39", n800:"#3d3527",
+          pbg:"#101a3c", pcard:"#182552", pline:"#2f4180", pice:"#f2c14e", pdim:"#93a0cc", pfg:"#f5efdf" }
+  };
+
+  FACTS = {
+    is: [
+      { n:"9 h", t:"La luz del día", b:"En Reikiavik amanece cerca de las 8:50 y oscurece cerca de las 17:45, y se pierden seis minutos cada día." },
+      { n:"0—7 °C", t:"El clima", b:"No hace un frío extremo, pero el viento es constante y es lo que de verdad se siente." },
+      { n:"230 V", t:"La corriente", b:"Enchufe tipo F, de dos clavijas redondas. Mejor usar las secadoras y planchas del hotel." },
+      { n:"Gratis", t:"El agua", b:"El agua de la llave en Islandia es de las mejores del mundo. La caliente huele a azufre y eso es normal." },
+      { n:"No", t:"Las propinas", b:"En Islandia no se dan; el servicio ya viene incluido en la cuenta." },
+      { n:"Tarjeta", t:"El dinero", b:"Casi nadie usa efectivo: se paga todo con tarjeta, incluso el baño de una gasolinera." },
+      { n:"50 min", t:"Del aeropuerto al hotel", b:"Keflavík está lejos de Reikiavik. El Flybus se compra por internet desde antes." },
+      { n:"Cuidado", t:"Las olas de Reynisfjara", b:"Esa playa negra ha cobrado vidas. Nunca darle la espalda al mar, por buena que se vea la foto." }
+    ],
+    nl: [
+      { n:"9 h 45", t:"La luz del día", b:"En Ámsterdam amanece cerca de las 8:15 y oscurece cerca de las 18:00. El 25 de octubre cambian el horario y anochece una hora antes." },
+      { n:"8—14 °C", t:"El clima", b:"Más templado que Islandia, pero llueve en ráfagas: sirve más un impermeable con capucha que un paraguas." },
+      { n:"230 V", t:"La corriente", b:"Mismo enchufe tipo F que en Islandia, así que sirve el mismo adaptador todo el viaje." },
+      { n:"Bici", t:"El peligro real", b:"Los ciclistas van rápido y tienen prioridad. Nunca caminar ni detenerse en el carril rojo de bicicletas." },
+      { n:"20 min", t:"Del aeropuerto al centro", b:"El tren de Schiphol a Ámsterdam Centraal tarda unos 20 minutos y sale cada pocos minutos." },
+      { n:"Check-in", t:"El transporte", b:"En tranvía y tren hay que registrar entrada y salida con la tarjeta en el lector, si no cobran la tarifa completa." },
+      { n:"No AmEx", t:"El dinero", b:"Muchos comercios rechazan American Express y algunos solo aceptan débito. Conviene llevar Visa o Mastercard." },
+      { n:"Redondear", t:"Las propinas", b:"No son obligatorias: basta redondear la cuenta o dejar cerca del 5 % si el servicio estuvo bien." }
+    ]
+  };
+
+  PH = {
+    is: [
+      { t:"Halló", p:"ja-LÓ", es:"Hola" },
+      { t:"Góðan daginn", p:"GÓ-than DÁI-yin", es:"Buenos días" },
+      { t:"Takk fyrir", p:"tak FÍ-rir", es:"Muchas gracias" },
+      { t:"Já · Nei", p:"yau · nei", es:"Sí · No" },
+      { t:"Afsakið", p:"AF-sa-kith", es:"Disculpe" },
+      { t:"Talarðu ensku?", p:"TA-lar-thu ENS-ku", es:"¿Habla inglés?" },
+      { t:"Hvað kostar þetta?", p:"kvath KOS-tar THE-ta", es:"¿Cuánto cuesta esto?" },
+      { t:"Salerni", p:"SA-lerd-ni", es:"Baño" },
+      { t:"Bless", p:"bles", es:"Adiós" },
+      { t:"Skál!", p:"skaul", es:"¡Salud!" },
+      { t:"Jökull · Foss", p:"YÖ-kutl · fos", es:"Glaciar · Cascada. Aparecen en casi todos los nombres." },
+      { t:"Norðurljós", p:"NOR-thur-lyous", es:"Auroras boreales" }
+    ],
+    nl: [
+      { t:"Hallo", p:"ja-LÓ", es:"Hola" },
+      { t:"Goedemorgen", p:"JU-de-MOR-jen", es:"Buenos días" },
+      { t:"Dank je wel", p:"dank ye vel", es:"Muchas gracias" },
+      { t:"Alsjeblieft", p:"al-she-BLIFT", es:"Por favor · Aquí tiene" },
+      { t:"Ja · Nee", p:"ya · ney", es:"Sí · No" },
+      { t:"Spreekt u Engels?", p:"spreikt ü ENG-els", es:"¿Habla inglés?" },
+      { t:"Hoeveel kost het?", p:"ju-VEIL kost het", es:"¿Cuánto cuesta?" },
+      { t:"Waar is het toilet?", p:"vaar is het tua-LET", es:"¿Dónde está el baño?" },
+      { t:"Tot ziens", p:"tot sins", es:"Hasta luego" },
+      { t:"Proost!", p:"prost", es:"¡Salud!" }
+    ]
+  };
+
+  componentDidMount() {
+    let saved = {};
+    try { saved = JSON.parse(window.localStorage.getItem(this.KEY) || "{}") || {}; } catch (e) { saved = {}; }
+    let mode = this.props.mode ?? "is";
+    try { mode = window.localStorage.getItem(this.MODE_KEY) || mode; } catch (e) {}
+    this.setState({ done: saved, mode: mode === "nl" ? "nl" : "is" });
+    this.tick();
+    this.timer = setInterval(() => this.tick(), 1000);
+  }
+  componentWillUnmount() { clearInterval(this.timer); }
+
+  pad(n) { return (n < 10 ? "0" : "") + n; }
+  fmt(tz) {
+    try { return new Intl.DateTimeFormat("es-MX", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false, timeZone: tz }).format(new Date()); }
+    catch (e) { return "--:--:--"; }
+  }
+  tick() {
+    const diff = new Date("2026-10-17T17:13:00-06:00").getTime() - Date.now();
+    let next = { d: "0", h: "00", m: "00", s: "00" };
+    if (diff > 0) {
+      const t = Math.floor(diff / 1000);
+      next = { d: String(Math.floor(t / 86400)), h: this.pad(Math.floor((t % 86400) / 3600)), m: this.pad(Math.floor((t % 3600) / 60)), s: this.pad(t % 60) };
+    }
+    next.gdl = this.fmt("America/Mexico_City");
+    next.kef = this.fmt("Atlantic/Reykjavik");
+    next.ams = this.fmt("Europe/Amsterdam");
+    this.setState(next);
+  }
+
+  openPlace(id) {
+    try { window.__openLugar = id; } catch (e) {}
+    this.setState({ openId: id, detImgs: [], detIdx: 0, detWiki: "", detLoaded: false });
+    this.lockScroll(true);
+    this.loadMedia(id);
+  }
+
+  async loadMedia(id) {
+    const p = ((window.PLACES) || []).find(x => x.s === id);
+    if (!p) { this.setState({ detLoaded: true }); return; }
+    const langs = [{ lang:"es", title:p.w || p.n }, { lang:"en", title:p.we || p.w || p.n }];
+    for (const t of langs) {
+      try {
+        const api = "https://" + t.lang + ".wikipedia.org/w/api.php?origin=*&format=json&formatversion=2&redirects=1&action=query&prop=extracts&exintro=1&explaintext=1&titles=" + encodeURIComponent(t.title);
+        const j = await (await fetch(api)).json();
+        const ex = ((((j.query || {}).pages || [])[0] || {}).extract || "").trim();
+        if (ex.length > 80 && this.state.openId === id) { this.setState({ detWiki: ex, detLang: t.lang }); break; }
+      } catch (e) {}
+    }
+    const q = (p.w || p.n || "").replace(/\s*\([^)]*\)\s*/g, " ").trim();
+    const country = p.c === "nl" ? "Netherlands" : "Iceland";
+    for (const search of [q + " " + country, q]) {
+      try {
+        const api = "https://commons.wikimedia.org/w/api.php?origin=*&format=json&formatversion=2" +
+          "&action=query&generator=search&gsrnamespace=6&gsrlimit=24&gsrsearch=" + encodeURIComponent(search) +
+          "&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=1600";
+        const j = await (await fetch(api)).json();
+        const imgs = (((j.query || {}).pages) || [])
+          .map(x => ({ title: x.title || "", info: (x.imageinfo || [])[0] }))
+          .filter(x => x.info && /\.(jpe?g|png)$/i.test(x.info.url || ""))
+          .filter(x => !/(icon|logo|flag|map|diagram|symbol|coat|chart|graph|sign|plan|drawing)/i.test(x.title))
+          .map(x => ({
+            url: "https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent(String(x.title).replace(/^File:/, "").replace(/ /g, "_")) + "?width=1400",
+            credit: ((((x.info.extmetadata || {}).Artist || {}).value) || "Wikimedia Commons").replace(/<[^>]*>/g, "").trim().slice(0, 38)
+          }))
+          .slice(0, 8);
+        if (imgs.length && this.state.openId === id) { this.setState({ detImgs: imgs, detIdx: 0, detLoaded: true }); return; }
+      } catch (e) {}
+    }
+    this.setState({ detLoaded: true });
+  }
+
+  lockScroll(on) {
+    try { document.body.style.overflow = on ? "hidden" : ""; } catch (e) {}
+  }
+
+  setMode(mode) {
+    this.setState({ mode });
+    try { window.localStorage.setItem(this.MODE_KEY, mode); } catch (e) {}
+  }
+
+  toggle(key) {
+    this.setState(s => {
+      const done = Object.assign({}, s.done);
+      done[key] = !done[key];
+      try { window.localStorage.setItem(this.KEY, JSON.stringify(done)); } catch (e) {}
+      return { done };
+    });
+  }
+
+  renderVals() {
+    const done = this.state.done || {};
+    const mode = this.state.mode === "nl" ? "nl" : "is";
+    const t = this.THEMES[mode];
+    const fc = this.state.fc === "nl" ? "nl" : "is";
+    const pc = this.state.pc === "nl" ? "nl" : "is";
+    const all = (typeof window !== "undefined" && window.PLACES) || [];
+    const sel = all.find(p => p.s === this.state.openId) || {};
+    const det = Object.assign({}, sel, {
+      country: sel.c === "nl" ? "Países Bajos" : "Islandia",
+      ytUrl: "https://www.youtube.com/results?search_query=" + encodeURIComponent(sel.yt || sel.n || ""),
+      mapUrl: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent((sel.n || "") + (sel.c === "nl" ? " Netherlands" : " Iceland")),
+      wikiUrl: "https://" + (this.state.detLang || "es") + ".wikipedia.org/wiki/" + encodeURIComponent(sel.w || sel.n || "")
+    });
+    const dimgs = this.state.detImgs || [];
+    const didx = dimgs.length ? (((this.state.detIdx || 0) % dimgs.length) + dimgs.length) % dimgs.length : 0;
+    const dcur = dimgs[didx] || {};
+    const wikiPars = (this.state.detWiki || "").split(/\n+/).filter(x => x.trim().length > 60).slice(0, 1);
+    const detHistory = ((sel.hist ? [sel.hist] : []).concat(wikiPars)).map(text => ({ text }));
+
+    const info = this.INFO[this.INFO_OF[sel.s]] || null;
+    const infoImg = info ? React.createElement("figure", { style: { margin: 0, border: "2px solid var(--color-text)" } },
+      React.createElement("img", { src: info.img, alt: info.t, style: { width: "100%", height: "auto", display: "block" } })) : null;
+
+    const detLogis = [
+      ["Presupuesto y entrada", sel.cost], ["Mejor horario", sel.hour],
+      ["Esfuerzo y accesibilidad", sel.effort], ["Caminata y terreno", sel.walk],
+      ["Estacionamiento y baños", sel.logis], ["Qué comer cerca", sel.food],
+      ["Equipo y fotografía", sel.gear], ["Luz natural", sel.light],
+      ["Reservas", sel.booking], ["Señal móvil", sel.signal],
+      ["Plan B por clima", sel.planb], ["Cine y series", sel.film]
+    ].filter(x => x[1] && String(x[1]).trim().length > 2).map(x => ({ label: x[0], text: x[1] }));
+
+    const places = all.filter(p => p.c === pc).map(p => Object.assign({}, p, {
+      open: () => this.openPlace(p.s),
+      ytUrl: "https://www.youtube.com/results?search_query=" + encodeURIComponent(p.yt)
+    }));
+    const gearEssOnly = this.state.gearEss === true;
+    const gear = this.GEAR.filter(g => !gearEssOnly || g.ess).map(g => ({
+      slot: g.slot, cat: g.cat, item: g.item, why: g.why, you: g.you, old: g.old, price: g.price,
+      ph: "Arrastra aquí una foto · " + g.item,
+      hasImg: !!this.GEAR_IMG[g.slot], noImg: !this.GEAR_IMG[g.slot],
+      imgEl: this.GEAR_IMG[g.slot] ? React.createElement("div", { style: { position: "relative", width: "100%", height: "100%" } },
+        React.createElement("img", { src: this.GEAR_IMG[g.slot], alt: g.item, loading: "lazy", style: { width: "100%", height: "100%", objectFit: "cover", display: "block" } }),
+        React.createElement("div", { style: { position: "absolute", right: 0, bottom: 0, padding: "4px 8px", background: "var(--color-text)", color: "var(--color-bg)", fontSize: "9px", letterSpacing: ".12em", textTransform: "uppercase" } }, "Referencia · Wikimedia")) : null,
+      tag: g.tag,
+      tagBg: g.tag === "Imprescindible" ? "var(--color-accent)" : "var(--color-neutral-200)",
+      tagFg: g.tag === "Imprescindible" ? "var(--color-bg)" : "var(--color-neutral-800)",
+      url: "https://www.google.com/search?tbm=isch&q=" + encodeURIComponent(g.q)
+    }));
+
+    const lists = this.LISTS.map(l => {
+      const items = l.items.map((label, i) => {
+        const key = l.id + ":" + i;
+        const d = !!done[key];
+        return { label, done: d, toggle: () => this.toggle(key),
+          mark: d ? "✓" : "",
+          bg: d ? "var(--color-accent)" : "transparent",
+          bg2: d ? "var(--color-accent)" : "var(--color-neutral-500)",
+          color: d ? "var(--color-neutral-500)" : "var(--color-text)",
+          deco: d ? "line-through" : "none" };
+      });
+      const n = items.filter(it => it.done).length;
+      return { title: l.title, sub: l.sub, items,
+        progress: n === items.length ? "Todo listo ✓" : n + " de " + items.length + " listo" + (n === 1 ? "" : "s") };
+    });
+    return {
+      d: this.state.d, h: this.state.h, m: this.state.m, s: this.state.s,
+      gdl: this.state.gdl, kef: this.state.kef, ams: this.state.ams,
+      lists,
+      mode, t, isIs: mode === "is", isNl: mode === "nl",
+      phrases: this.PH[mode],
+      facts: this.FACTS[fc],
+      lugarOpen: !!this.state.openId, openId: this.state.openId || "",
+      closeLugar: () => { this.setState({ openId: null }); this.lockScroll(false); },
+      det, detHistory, detTips: (det.tips || []).map((text, i) => ({ text, num: "0" + (i + 1) })),
+      detTodo: (det.todo || []).map(text => ({ text })),
+      hasLogis: detLogis.length > 0, detLogis,
+      hasInfo: !!info, infoTitle: info ? info.t : "", infoSub: info ? info.s : "", infoImg,
+      gear,
+      gearAll: () => this.setState({ gearEss: false }),
+      gearEss: () => this.setState({ gearEss: true }),
+      gearAllBg: gearEssOnly ? "transparent" : "var(--color-accent)",
+      gearAllFg: gearEssOnly ? "var(--color-text)" : "var(--color-bg)",
+      gearEssBg: gearEssOnly ? "var(--color-accent)" : "transparent",
+      gearEssFg: gearEssOnly ? "var(--color-bg)" : "var(--color-text)",
+      detSiblings: all.filter(x => x.c === det.c && x.s !== det.s).map(x => ({ n: x.n, p: x.p, go: () => this.openPlace(x.s) })),
+      imgEl: dcur.url ? React.createElement("img", { src: dcur.url, alt: det.n || "", style: { width: "100%", height: "100%", objectFit: "cover", display: "block" } }) : null,
+      imgCredit: dcur.credit || "",
+      imgCount: dimgs.length ? (didx + 1) + " / " + dimgs.length : (this.state.detLoaded ? "Sin fotos" : "Cargando…"),
+      imgNote: dimgs.length ? "Fotos libres de Wikimedia Commons. El crédito del autor va sobre cada imagen." : (this.state.detLoaded ? "No se encontraron fotos libres de este lugar." : "Buscando fotos…"),
+      imgPrev: () => this.setState(st => ({ detIdx: (st.detIdx || 0) - 1 })),
+      imgNext: () => this.setState(st => ({ detIdx: (st.detIdx || 0) + 1 })),
+      imgDots: dimgs.map((_, i) => ({ go: () => this.setState({ detIdx: i }), bg: i === didx ? "var(--color-accent)" : "var(--color-neutral-400)" })),
+      places, placesCount: places.length + (pc === "is" ? " lugares en Islandia" : " lugares en Países Bajos"),
+      placesIs: () => this.setState({ pc: "is" }), placesNl: () => this.setState({ pc: "nl" }),
+      pIsBg: pc === "is" ? "var(--color-accent)" : "transparent",
+      pIsFg: pc === "is" ? "var(--color-bg)" : "var(--color-text)",
+      pNlBg: pc === "nl" ? "var(--color-accent)" : "transparent",
+      pNlFg: pc === "nl" ? "var(--color-bg)" : "var(--color-text)",
+      factsIs: () => this.setState({ fc: "is" }), factsNl: () => this.setState({ fc: "nl" }),
+      fIsBg: fc === "is" ? "var(--color-accent)" : "transparent",
+      fIsFg: fc === "is" ? "var(--color-bg)" : "var(--color-text)",
+      fNlBg: fc === "nl" ? "var(--color-accent)" : "transparent",
+      fNlFg: fc === "nl" ? "var(--color-bg)" : "var(--color-text)",
+      setIs: () => this.setMode("is"), setNl: () => this.setMode("nl"),
+      mIsBg: mode === "is" ? "var(--color-accent)" : "transparent",
+      mIsFg: mode === "is" ? "var(--color-bg)" : "var(--color-text)",
+      mNlBg: mode === "nl" ? "var(--color-accent)" : "transparent",
+      mNlFg: mode === "nl" ? "var(--color-bg)" : "var(--color-text)"
+    };
+  }
+}
+</script>
+</body>
+</html>
+

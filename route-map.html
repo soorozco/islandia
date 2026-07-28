@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="_ds/modernist-f616c0fc-2f19-4ca9-b4bb-2a0de125aa29/styles.css">
+<script src="https://unpkg.com/d3@7.9.0/dist/d3.min.js" integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js" integrity="sha384-Ukv1p/xTma6P4/2bY5KzWBw+ydSpXmhCMtyciIQVDJ1RmOxtCYNMF1uXT9T63H67" crossorigin="anonymous"></script>
+<style>
+  html,body{margin:0;background:#0a1020;font-family:var(--font-body,Archivo,sans-serif);overflow:hidden}
+  #map{display:block;width:100%;height:100vh}
+  .lbl{font-family:var(--font-heading,Archivo,sans-serif);font-weight:800;letter-spacing:1.6px}
+  #dirs{position:absolute;left:18px;top:16px;display:flex;border:1px solid rgba(255,255,255,.35)}
+  #dirs button{font-family:var(--font-heading,Archivo,sans-serif);font-weight:800;font-size:11px;letter-spacing:.16em;text-transform:uppercase;padding:9px 16px;border:0;cursor:pointer;background:transparent;color:#fff}
+  #dirs button + button{border-left:1px solid rgba(255,255,255,.35)}
+  #dirs button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+  @keyframes drift1{0%{transform:translate(-4%,0) scaleY(1);opacity:.42}50%{transform:translate(6%,-2%) scaleY(1.25);opacity:.72}100%{transform:translate(-4%,0) scaleY(1);opacity:.42}}
+  @keyframes drift2{0%{transform:translate(5%,1%) scaleY(1.1);opacity:.3}50%{transform:translate(-6%,-3%) scaleY(.85);opacity:.6}100%{transform:translate(5%,1%) scaleY(1.1);opacity:.3}}
+  #aur1{animation:drift1 17s ease-in-out infinite}
+  #aur2{animation:drift2 23s ease-in-out infinite}
+  @media(prefers-reduced-motion:reduce){#aur1,#aur2{animation:none}}
+</style>
+</head>
+<body>
+<svg id="map" viewBox="0 0 1000 470" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Mapa de la ruta Guadalajara, Ciudad de México, Ámsterdam, Reikiavik"></svg>
+<div id="dirs">
+  <button id="btn-ida" type="button">Ida</button>
+  <button id="btn-vta" type="button">Regreso</button>
+</div>
+<script>
+const W = 1000, H = 470;
+const MODE = new URLSearchParams(location.search).get("m") === "nl" ? "nl" : "is";
+const PAL = {
+  is: { ocean:"#05101b", land:"#0e2a3f", coast:"#2f6c85", grid:"#12324a", arc:"#8fdfef", aur1:"#4fe0a4", aur2:"#7aa8ff", node:"#e8f6fa", sub:"#7fa8bb", plane:"#f3f9fb" },
+  nl: { ocean:"#101a3c", land:"#1d2a5c", coast:"#5f6fae", grid:"#243468", arc:"#f2c14e", aur1:"#f2c14e", aur2:"#7f8ede", node:"#f7f1de", sub:"#a3aede", plane:"#fdf6e3" }
+}[MODE];
+const ICE = PAL.arc, AUR = PAL.aur1, NODE = PAL.node;
+document.body.style.background = PAL.ocean;
+
+const AP = {
+  GDL: { id:"GDL", name:"Guadalajara", c:[-103.31, 20.52], dx:0,  dy:26, anchor:"middle" },
+  MEX: { id:"MEX", name:"Ciudad de México", c:[-99.13, 19.43], dx:14, dy:26, anchor:"start" },
+  AMS: { id:"AMS", name:"Ámsterdam", c:[4.76, 52.31], dx:12, dy:24, anchor:"start" },
+  KEF: { id:"KEF", name:"Reikiavik", c:[-22.61, 64.13], dx:-14, dy:-4, anchor:"end" }
+};
+const ROUTES = {
+  ida:     { stops:["GDL","MEX","AMS","KEF"], times:["1 h 37 m","10 h 50 m","3 h 15 m"] },
+  regreso: { stops:["KEF","AMS","MEX","GDL"], times:["3 h 05 m","12 h 05 m","1 h 35 m"] }
+};
+let dir = "ida";
+
+const svg = d3.select("#map");
+const defs = svg.append("defs");
+const blur = defs.append("filter").attr("id","soft").attr("x","-50%").attr("y","-50%").attr("width","200%").attr("height","200%");
+blur.append("feGaussianBlur").attr("stdDeviation", 26);
+const glow = defs.append("filter").attr("id","glow").attr("x","-120%").attr("y","-120%").attr("width","340%").attr("height","340%");
+glow.append("feGaussianBlur").attr("stdDeviation", 3.2).attr("result","b");
+const gm = glow.append("feMerge"); gm.append("feMergeNode").attr("in","b"); gm.append("feMergeNode").attr("in","SourceGraphic");
+const g1 = defs.append("linearGradient").attr("id","aurA").attr("x1","0").attr("x2","1");
+g1.append("stop").attr("offset","0%").attr("stop-color",AUR).attr("stop-opacity",0);
+g1.append("stop").attr("offset","45%").attr("stop-color",AUR).attr("stop-opacity",1);
+g1.append("stop").attr("offset","100%").attr("stop-color",ICE).attr("stop-opacity",0);
+const g2 = defs.append("linearGradient").attr("id","aurB").attr("x1","0").attr("x2","1");
+g2.append("stop").attr("offset","0%").attr("stop-color",ICE).attr("stop-opacity",0);
+g2.append("stop").attr("offset","55%").attr("stop-color",PAL.aur2).attr("stop-opacity",.7);
+g2.append("stop").attr("offset","100%").attr("stop-color",AUR).attr("stop-opacity",0);
+
+svg.append("rect").attr("width",W).attr("height",H).attr("fill",PAL.ocean);
+const aur = svg.append("g").attr("filter","url(#soft)");
+aur.append("ellipse").attr("id","aur1").attr("cx",560).attr("cy",64).attr("rx",450).attr("ry",58).attr("fill","url(#aurA)").attr("opacity",.9);
+aur.append("ellipse").attr("id","aur2").attr("cx",520).attr("cy",120).attr("rx",400).attr("ry",40).attr("fill","url(#aurB)").attr("opacity",.8);
+
+const projection = d3.geoMercator().fitExtent([[70,96],[W-70,H-64]], { type:"MultiPoint", coordinates: Object.values(AP).map(a=>a.c) });
+const path = d3.geoPath(projection);
+const gGeo = svg.append("g");
+gGeo.append("path").attr("d", path(d3.geoGraticule().step([20,20])())).attr("fill","none").attr("stroke",PAL.grid).attr("stroke-width",.6);
+
+const gArcs = svg.append("g");
+const gTimes = svg.append("g");
+const gNodes = svg.append("g");
+const plane = svg.append("g").attr("opacity",0);
+plane.append("path")
+  .attr("d","M0,-13 C1.7,-13 2.6,-9.4 2.8,-5.2 L12.6,1.4 C13.4,1.9 13.4,3.6 12.4,3.2 L2.8,0.2 L2.8,7.4 L6.4,10.4 C7,10.9 6.9,12.1 6.1,11.8 L0,9.9 L-6.1,11.8 C-6.9,12.1 -7,10.9 -6.4,10.4 L-2.8,7.4 L-2.8,0.2 L-12.4,3.2 C-13.4,3.6 -13.4,1.9 -12.6,1.4 L-2.8,-5.2 C-2.6,-9.4 -1.7,-13 0,-13 Z")
+  .attr("fill",PAL.plane).attr("filter","url(#glow)").attr("transform","scale(1.2)");
+
+fetch("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json")
+  .then(r => r.json())
+  .then(topo => {
+    const countries = topojson.feature(topo, topo.objects.countries);
+    gGeo.insert("path", ":first-child")
+      .attr("d", path(countries))
+      .attr("fill",PAL.land).attr("stroke",PAL.coast).attr("stroke-width",.8);
+    start();
+  })
+  .catch(() => start());
+
+let legs = [], stops = [], t0 = null;
+
+function drawNodes() {
+  gNodes.selectAll("*").remove();
+  Object.values(AP).forEach(a => {
+    const [x,y] = projection(a.c);
+    const gn = gNodes.append("g").attr("transform", `translate(${x},${y})`);
+    gn.append("circle").attr("class","halo").attr("r",4).attr("fill","none").attr("stroke",ICE).attr("stroke-width",1.4).attr("opacity",.35);
+    gn.append("rect").attr("x",-3.5).attr("y",-3.5).attr("width",7).attr("height",7).attr("fill",NODE);
+    gn.append("text").attr("class","lbl").attr("x",a.dx).attr("y",a.dy).attr("text-anchor",a.anchor)
+      .attr("font-size",15).attr("fill",NODE).text(a.id);
+    gn.append("text").attr("x",a.dx).attr("y",a.dy + 15).attr("text-anchor",a.anchor)
+      .attr("font-size",11).attr("fill",PAL.sub).attr("letter-spacing",.4).text(a.name);
+    a.g = gn;
+  });
+}
+
+function buildRoute() {
+  gArcs.selectAll("*").remove();
+  gTimes.selectAll("*").remove();
+  const route = ROUTES[dir];
+  stops = route.stops.map(k => AP[k]);
+  legs = [];
+  for (let i = 0; i < stops.length - 1; i++) {
+    const p = gArcs.append("path")
+      .attr("d", path({ type:"LineString", coordinates:[stops[i].c, stops[i+1].c] }))
+      .attr("fill","none").attr("stroke",ICE).attr("stroke-width",1.8)
+      .attr("stroke-linecap","round").attr("opacity",.9);
+    const len = p.node().getTotalLength();
+    p.attr("stroke-dasharray", len + " " + len).attr("stroke-dashoffset", len);
+    legs.push({ p, len, node: p.node() });
+  }
+  legs.forEach((l, i) => {
+    const mid = l.node.getPointAtLength(l.len / 2);
+    const a = l.node.getPointAtLength(Math.max(0, l.len / 2 - 6));
+    const b = l.node.getPointAtLength(Math.min(l.len, l.len / 2 + 6));
+    const nx = -(b.y - a.y), ny = (b.x - a.x);
+    const nl = Math.hypot(nx, ny) || 1;
+    let x = mid.x + (nx / nl) * 18, y = mid.y + (ny / nl) * 18;
+    if (l.len < 130) { x = mid.x - 96; y = mid.y - 4; }
+    const g = gTimes.append("g").attr("transform", `translate(${x},${y})`).attr("opacity",.18);
+    const label = route.times[i] || "";
+    const w = label.length * 7.6 + 16;
+    g.append("rect").attr("x", -w/2).attr("y", -10).attr("width", w).attr("height", 20)
+      .attr("fill", PAL.ocean).attr("stroke", PAL.arc).attr("stroke-width", 1);
+    g.append("text").attr("class","lbl").attr("text-anchor","middle").attr("y",4.5)
+      .attr("font-size",11).attr("letter-spacing",1.1).attr("fill",PAL.arc).text(label);
+    l.time = g;
+  });
+  t0 = null;
+}
+
+function paintButtons() {
+  const ida = document.getElementById("btn-ida"), vta = document.getElementById("btn-vta");
+  ida.style.background = dir === "ida" ? PAL.arc : "transparent";
+  ida.style.color = dir === "ida" ? PAL.ocean : "#fff";
+  vta.style.background = dir === "regreso" ? PAL.arc : "transparent";
+  vta.style.color = dir === "regreso" ? PAL.ocean : "#fff";
+}
+
+function setDir(d) {
+  if (dir === d) return;
+  dir = d;
+  buildRoute();
+  paintButtons();
+}
+
+function place(leg, f) {
+  const L = leg.len, d = Math.max(0.6, Math.min(L - 0.6, L * f));
+  const p1 = leg.node.getPointAtLength(d);
+  const p0 = leg.node.getPointAtLength(Math.max(0, d - 1.2));
+  const ang = Math.atan2(p1.y - p0.y, p1.x - p0.x) * 180 / Math.PI + 90;
+  plane.attr("transform", `translate(${p1.x},${p1.y}) rotate(${ang})`);
+}
+
+function start() {
+  drawNodes();
+  buildRoute();
+  paintButtons();
+  document.getElementById("btn-ida").addEventListener("click", () => setDir("ida"));
+  document.getElementById("btn-vta").addEventListener("click", () => setDir("regreso"));
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    legs.forEach(l => { l.p.attr("stroke-dashoffset", 0); l.time.attr("opacity", .9); });
+    place(legs[legs.length-1], 1);
+    plane.attr("opacity", 1);
+    return;
+  }
+
+  const LEG_MS = 2600, PAUSE_MS = 700, TAIL_MS = 1400;
+  function frame(ts) {
+    if (t0 === null) t0 = ts;
+    const total = legs.length * (LEG_MS + PAUSE_MS) + TAIL_MS;
+    const t = (ts - t0) % total;
+    let acc = 0, active = -1, prog = 0;
+    for (let i = 0; i < legs.length; i++) {
+      if (t < acc + LEG_MS) { active = i; prog = (t - acc) / LEG_MS; break; }
+      acc += LEG_MS;
+      if (t < acc + PAUSE_MS) { active = i; prog = 1; break; }
+      acc += PAUSE_MS;
+    }
+    if (active === -1) { active = legs.length - 1; prog = 1; }
+    const e = prog < .5 ? 2*prog*prog : 1 - Math.pow(-2*prog+2,2)/2;
+
+    legs.forEach((l,i) => {
+      const done = i < active ? 1 : (i === active ? e : 0);
+      l.p.attr("stroke-dashoffset", l.len * (1 - done)).attr("opacity", i <= active ? .95 : .12);
+      l.time.attr("opacity", i < active ? .8 : (i === active ? Math.min(1, e * 2.5) : .18));
+      if (i > active) l.p.attr("stroke-dashoffset", l.len).attr("opacity", .14);
+    });
+    if (t > legs.length * (LEG_MS + PAUSE_MS)) {
+      const f = 1 - (t - legs.length*(LEG_MS+PAUSE_MS)) / TAIL_MS;
+      legs.forEach(l => { l.p.attr("opacity", .95 * Math.max(f,0)); l.time.attr("opacity", .8 * Math.max(f,0)); });
+    }
+
+    stops.forEach((a,i) => {
+      const reached = i <= active || (i === active + 1 && prog > .98);
+      a.g.select(".halo").attr("r", reached ? 9 + 3*Math.sin(ts/420) : 4).attr("opacity", reached ? .55 : .25);
+    });
+
+    place(legs[active], e);
+    plane.attr("opacity", 1);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+</script>
+</body>
+</html>

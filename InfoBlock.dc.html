@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);display:flex;flex-direction:column">
+  <div style="background:var(--color-text);color:var(--color-bg);padding:12px 18px;font-family:var(--font-heading);font-weight:800;font-size:13px;letter-spacing:.12em;text-transform:uppercase">{{ title }}</div>
+  <div style="padding:18px;display:flex;flex-direction:column;gap:2px;flex:1">
+    <sc-if value="{{ dGeyser }}" hint-placeholder-val="{{ false }}">
+      <svg viewBox="0 0 400 170" style="width:100%;height:auto;display:block;margin-bottom:14px;border:1px solid var(--color-divider);background:#dfe9ee" role="img" aria-label="Corte de un géiser">
+        <rect x="0" y="70" width="400" height="100" fill="#8a7a63"></rect>
+        <rect x="0" y="130" width="400" height="40" fill="#c2451f"></rect>
+        <path d="M180 70 L180 118 L150 118 L150 132 L250 132 L250 118 L220 118 L220 70 Z" fill="#4b7f96" stroke="#16232b" stroke-width="3"></path>
+        <path d="M200 66 C186 40 214 34 200 6 C214 30 190 44 204 66 Z" fill="#eaf6fb" stroke="#16232b" stroke-width="3"></path>
+        <path d="M168 68 C160 50 176 44 170 26" fill="none" stroke="#eaf6fb" stroke-width="7" stroke-linecap="round"></path>
+        <path d="M234 68 C242 52 228 46 234 30" fill="none" stroke="#eaf6fb" stroke-width="7" stroke-linecap="round"></path>
+        <ellipse cx="200" cy="70" rx="52" ry="9" fill="#f0f5f7" stroke="#16232b" stroke-width="3"></ellipse>
+        <path d="M40 88 L120 116" stroke="#2f6f88" stroke-width="4" stroke-linecap="round"></path>
+        <path d="M60 76 L134 106" stroke="#2f6f88" stroke-width="4" stroke-linecap="round"></path>
+        <path d="M360 88 L280 116" stroke="#2f6f88" stroke-width="4" stroke-linecap="round"></path>
+        <path d="M200 150 L200 136" stroke="#f2c14e" stroke-width="6" stroke-linecap="round"></path>
+      </svg>
+    </sc-if>
+    <sc-if value="{{ dAurora }}" hint-placeholder-val="{{ false }}">
+      <svg viewBox="0 0 400 170" style="width:100%;height:auto;display:block;margin-bottom:14px;border:1px solid var(--color-divider);background:#0b1622" role="img" aria-label="Viento solar y aurora">
+        <circle cx="34" cy="46" r="24" fill="#e8912d"></circle>
+        <path d="M64 52 L150 74 M64 66 L150 86 M64 80 L150 98" stroke="#e8912d" stroke-width="3" stroke-linecap="round"></path>
+        <circle cx="300" cy="120" r="72" fill="#1d5b7a"></circle>
+        <path d="M240 96 C270 70 330 70 360 96" fill="none" stroke="#5fb7d4" stroke-width="3"></path>
+        <path d="M230 118 C268 84 332 84 370 118" fill="none" stroke="#5fb7d4" stroke-width="3"></path>
+        <path d="M258 78 C266 52 300 42 320 56" fill="none" stroke="#27ae60" stroke-width="10" stroke-linecap="round"></path>
+        <path d="M272 74 C284 48 312 40 332 52" fill="none" stroke="#8e44ad" stroke-width="6" stroke-linecap="round" opacity=".85"></path>
+        <circle cx="182" cy="60" r="7" fill="#c0392b"></circle>
+        <circle cx="204" cy="82" r="7" fill="#27ae60"></circle>
+        <circle cx="176" cy="102" r="7" fill="#2f5fa8"></circle>
+        <path d="M190 64 L246 84 M212 86 L250 96" stroke="#f0f5f7" stroke-width="2" stroke-dasharray="5 5"></path>
+      </svg>
+    </sc-if>
+    <sc-if value="{{ dGlacier }}" hint-placeholder-val="{{ false }}">
+      <svg viewBox="0 0 400 170" style="width:100%;height:auto;display:block;margin-bottom:14px;border:1px solid var(--color-divider);background:#dfe9ee" role="img" aria-label="Corte de un glaciar">
+        <path d="M0 170 L0 120 L120 96 L400 130 L400 170 Z" fill="#8a7a63"></path>
+        <path d="M0 118 L120 62 L280 84 L400 128 L400 130 L120 96 L0 120 Z" fill="#6b5744"></path>
+        <path d="M0 116 L120 60 L282 82 L400 126 L400 132 L120 94 L0 118 Z" fill="#8fd0e6" stroke="#16232b" stroke-width="3"></path>
+        <path d="M6 100 L124 48 L286 70 L396 112" fill="none" stroke="#dbe9f0" stroke-width="9"></path>
+        <path d="M10 86 L126 38 L288 60 L394 100" fill="none" stroke="#ffffff" stroke-width="7"></path>
+        <path d="M168 58 L162 92 M212 64 L206 98 M256 70 L250 104" stroke="#16232b" stroke-width="3"></path>
+        <path d="M300 86 C316 94 330 100 352 108" fill="none" stroke="#2f6f88" stroke-width="4" marker-end=""></path>
+        <circle cx="330" cy="126" r="10" fill="#4b7f96" stroke="#16232b" stroke-width="3"></circle>
+      </svg>
+    </sc-if>
+    <sc-if value="{{ dColumns }}" hint-placeholder-val="{{ false }}">
+      <svg viewBox="0 0 400 170" style="width:100%;height:auto;display:block;margin-bottom:14px;border:1px solid var(--color-divider);background:#dfe9ee" role="img" aria-label="Columnas de basalto y oleaje">
+        <rect x="0" y="120" width="400" height="50" fill="#2b2b2b"></rect>
+        <g fill="#4a4a4a" stroke="#16232b" stroke-width="3">
+          <rect x="24" y="46" width="26" height="76"></rect>
+          <rect x="52" y="34" width="26" height="88"></rect>
+          <rect x="80" y="54" width="26" height="68"></rect>
+          <rect x="108" y="28" width="26" height="94"></rect>
+          <rect x="136" y="50" width="26" height="72"></rect>
+        </g>
+        <path d="M176 122 L176 78 L214 68 L214 122 Z" fill="#3a3a3a" stroke="#16232b" stroke-width="3"></path>
+        <path d="M300 122 L308 62 L322 122 Z" fill="#4a4a4a" stroke="#16232b" stroke-width="3"></path>
+        <path d="M340 122 L348 76 L360 122 Z" fill="#4a4a4a" stroke="#16232b" stroke-width="3"></path>
+        <path d="M230 124 C252 104 268 132 290 116 C306 104 320 122 340 116" fill="none" stroke="#4b7f96" stroke-width="5" stroke-linecap="round"></path>
+        <path d="M232 140 C258 124 276 148 300 132 C318 120 332 138 352 132" fill="none" stroke="#7fb7c9" stroke-width="5" stroke-linecap="round"></path>
+        <path d="M198 150 L268 150" stroke="var(--color-accent)" stroke-width="5" stroke-linecap="round"></path>
+      </svg>
+    </sc-if>
+    <sc-if value="{{ dVolcano }}" hint-placeholder-val="{{ false }}">
+      <svg viewBox="0 0 400 170" style="width:100%;height:auto;display:block;margin-bottom:14px;border:1px solid var(--color-divider);background:#dfe9ee" role="img" aria-label="Corte de un volcán">
+        <rect x="0" y="96" width="400" height="74" fill="#8a7a63"></rect>
+        <rect x="0" y="136" width="400" height="34" fill="#c2451f"></rect>
+        <path d="M110 96 L200 26 L290 96 Z" fill="#5a5a5a" stroke="#16232b" stroke-width="3"></path>
+        <path d="M186 30 L200 8 L214 30 L206 44 L194 44 Z" fill="#e8912d" stroke="#16232b" stroke-width="3"></path>
+        <path d="M200 136 L200 44" stroke="#e05a2b" stroke-width="10"></path>
+        <ellipse cx="200" cy="122" rx="46" ry="16" fill="#e8912d" stroke="#16232b" stroke-width="3"></ellipse>
+        <path d="M200 26 C176 44 168 70 158 96" fill="none" stroke="#e05a2b" stroke-width="6"></path>
+        <path d="M60 96 L20 96" stroke="#16232b" stroke-width="4"></path>
+        <path d="M340 96 L380 96" stroke="#16232b" stroke-width="4"></path>
+        <path d="M52 88 L36 88 M348 88 L364 88" stroke="#16232b" stroke-width="4"></path>
+      </svg>
+    </sc-if>
+    <sc-if value="{{ dPlates }}" hint-placeholder-val="{{ false }}">
+      <svg viewBox="0 0 400 170" style="width:100%;height:auto;display:block;margin-bottom:14px;border:1px solid var(--color-divider);background:#dfe9ee" role="img" aria-label="Dos placas separándose">
+        <rect x="0" y="120" width="400" height="50" fill="#c2451f"></rect>
+        <path d="M0 60 L150 60 L172 120 L0 120 Z" fill="#6b8a5a" stroke="#16232b" stroke-width="3"></path>
+        <path d="M400 60 L250 60 L228 120 L400 120 Z" fill="#6b8a5a" stroke="#16232b" stroke-width="3"></path>
+        <path d="M172 120 L200 96 L228 120 Z" fill="#e05a2b" stroke="#16232b" stroke-width="3"></path>
+        <path d="M120 40 L60 40 M60 40 L74 30 M60 40 L74 50" fill="none" stroke="var(--color-accent)" stroke-width="4" stroke-linecap="round"></path>
+        <path d="M280 40 L340 40 M340 40 L326 30 M340 40 L326 50" fill="none" stroke="var(--color-accent)" stroke-width="4" stroke-linecap="round"></path>
+        <path d="M200 150 L200 120" stroke="#e8912d" stroke-width="6" stroke-linecap="round"></path>
+      </svg>
+    </sc-if>
+    <sc-if value="{{ dPower }}" hint-placeholder-val="{{ false }}">
+      <svg viewBox="0 0 400 170" style="width:100%;height:auto;display:block;margin-bottom:14px;border:1px solid var(--color-divider);background:#dfe9ee" role="img" aria-label="Del vapor a las casas">
+        <rect x="0" y="118" width="400" height="52" fill="#8a7a63"></rect>
+        <rect x="30" y="62" width="70" height="56" fill="#9fb2bb" stroke="#16232b" stroke-width="3"></rect>
+        <path d="M46 62 C40 42 60 40 54 20" fill="none" stroke="#f0f5f7" stroke-width="7" stroke-linecap="round"></path>
+        <circle cx="130" cy="92" r="18" fill="var(--color-accent)" stroke="#16232b" stroke-width="3"></circle>
+        <path d="M100 92 L112 92 M148 92 L200 92" stroke="#16232b" stroke-width="4"></path>
+        <path d="M200 92 L200 118" stroke="#c2451f" stroke-width="5"></path>
+        <g fill="#e8d9b8" stroke="#16232b" stroke-width="3">
+          <path d="M240 118 L240 92 L266 74 L292 92 L292 118 Z"></path>
+          <path d="M312 118 L312 96 L334 80 L356 96 L356 118 Z"></path>
+        </g>
+        <path d="M200 112 L240 112 M292 112 L312 112" stroke="#c2451f" stroke-width="5"></path>
+        <path d="M60 140 L360 140" stroke="#4b7f96" stroke-width="4" stroke-dasharray="10 8"></path>
+      </svg>
+    </sc-if>
+    <sc-if value="{{ dCave }}" hint-placeholder-val="{{ false }}">
+      <svg viewBox="0 0 400 170" style="width:100%;height:auto;display:block;margin-bottom:14px;border:1px solid var(--color-divider);background:#dfe9ee" role="img" aria-label="Cueva de hielo">
+        <path d="M0 170 L0 128 L400 148 L400 170 Z" fill="#8a7a63"></path>
+        <path d="M0 126 L90 52 L300 40 L400 106 L400 146 L0 126 Z" fill="#8fd0e6" stroke="#16232b" stroke-width="3"></path>
+        <path d="M96 128 C104 84 168 76 196 96 C222 114 218 132 214 134 Z" fill="#0f3b52" stroke="#16232b" stroke-width="3"></path>
+        <path d="M120 126 C126 96 168 90 190 106" fill="none" stroke="#5fb7d4" stroke-width="5"></path>
+        <path d="M240 60 C252 78 250 96 262 112" fill="none" stroke="#4b7f96" stroke-width="5" stroke-linecap="round"></path>
+        <path d="M300 52 L306 76 M330 60 L334 84" stroke="#dbe9f0" stroke-width="6" stroke-linecap="round"></path>
+      </svg>
+    </sc-if>
+
+    <sc-if value="{{ hasRows }}" hint-placeholder-val="{{ true }}">
+      <sc-for list="{{ rows }}" as="r" hint-placeholder-count="4">
+        <div style="display:grid;grid-template-columns:34px 1fr;gap:12px;padding:11px 0;border-bottom:1px solid var(--color-divider)">
+          <div style="font-family:var(--font-heading);font-weight:800;font-size:13px;color:var(--color-accent);letter-spacing:.06em;padding-top:2px">{{ r.n }}</div>
+          <div>
+            <div style="font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:-.01em;margin-bottom:3px">{{ r.t }}</div>
+            <div style="font-size:14px;line-height:1.5;color:var(--color-neutral-700);text-wrap:pretty">{{ r.d }}</div>
+          </div>
+        </div>
+      </sc-for>
+    </sc-if>
+    <sc-if value="{{ hasBands }}" hint-placeholder-val="{{ false }}">
+      <sc-for list="{{ bands }}" as="b" hint-placeholder-count="4">
+        <div style="display:grid;grid-template-columns:64px 12px 1fr;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid var(--color-divider)">
+          <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600);text-align:right">{{ b.at }}</div>
+          <div style="height:30px;border:1px solid var(--color-divider);background:{{ b.color }}"></div>
+          <div>
+            <div style="font-family:var(--font-heading);font-weight:800;font-size:14px">{{ b.label }}</div>
+            <div style="font-size:13px;color:var(--color-neutral-700)">{{ b.note }}</div>
+          </div>
+        </div>
+      </sc-for>
+    </sc-if>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:460,&quot;height&quot;:520},&quot;title&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Cómo funciona&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;dia&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;&quot;,&quot;geyser&quot;,&quot;aurora&quot;,&quot;glacier&quot;,&quot;columns&quot;,&quot;volcano&quot;,&quot;plates&quot;,&quot;power&quot;,&quot;cave&quot;],&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;rows&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;{n:string,t:string,d:string}[]&quot;},&quot;bands&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;{at:string,color:string,label:string,note:string}[]&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const rows = this.props.rows || [];
+    const bands = this.props.bands || [];
+    const d = this.props.dia || "";
+    return { title: this.props.title || "", rows, bands, hasRows: rows.length > 0, hasBands: bands.length > 0,
+      dGeyser: d === "geyser", dAurora: d === "aurora", dGlacier: d === "glacier", dColumns: d === "columns",
+      dVolcano: d === "volcano", dPlates: d === "plates", dPower: d === "power", dCave: d === "cave" };
+  }
+}
+
+</script>
+</body>
+</html>

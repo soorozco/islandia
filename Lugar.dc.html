@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/modernist-f616c0fc-2f19-4ca9-b4bb-2a0de125aa29/styles.css">
+<script src="_ds/modernist-f616c0fc-2f19-4ca9-b4bb-2a0de125aa29/_ds_bundle.js"></script>
+<script src="places.js"></script>
+<style>
+body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)}
+a{color:var(--color-accent)}
+a:hover{color:var(--color-accent-700)}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:var(--color-bg);--color-bg:{{ t.bg }};--color-text:{{ t.text }};--color-divider:{{ t.divider }};--color-accent:{{ t.accent }};--color-accent-100:{{ t.a100 }};--color-accent-400:{{ t.a400 }};--color-accent-700:{{ t.a700 }};--color-neutral-200:{{ t.n200 }};--color-neutral-400:{{ t.n400 }};--color-neutral-500:{{ t.n500 }};--color-neutral-600:{{ t.n600 }};--color-neutral-700:{{ t.n700 }};--color-neutral-800:{{ t.n800 }};color:var(--color-text)">
+
+<sc-if value="{{ isStandalone }}" hint-placeholder-val="{{ true }}">
+  <nav style="position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:14px 40px;background:var(--color-bg);border-bottom:2px solid var(--color-divider)">
+    <div style="font-family:var(--font-heading);font-weight:800;font-size:16px;letter-spacing:-.02em;margin-right:auto">OROZCO&nbsp;VELA <span style="color:var(--color-accent)">/</span> ISLANDIA 26</div>
+    <a href="Viaje Islandia 2026.dc.html#lugares" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:var(--color-text)" style-hover="color:var(--color-accent)">← Todos los lugares</a>
+  </nav>
+</sc-if>
+<sc-if value="{{ isEmbedded }}" hint-placeholder-val="{{ false }}">
+  <div style="position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:12px 40px;background:var(--color-bg);border-bottom:2px solid var(--color-divider)">
+    <div style="font-family:var(--font-heading);font-weight:800;font-size:16px;letter-spacing:-.02em;margin-right:auto">OROZCO&nbsp;VELA <span style="color:var(--color-accent)">/</span> ISLANDIA 26</div>
+    <button onClick="{{ close }}" style="font-family:var(--font-heading);font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:11px 18px;border:2px solid var(--color-text);background:transparent;color:var(--color-text);cursor:pointer" style-hover="border-color:var(--color-accent);color:var(--color-accent)">← Todos los lugares</button>
+  </div>
+</sc-if>
+
+<header style="padding:56px 40px 34px;border-bottom:2px solid var(--color-divider)">
+  <div style="max-width:900px;margin:0 auto">
+    <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:14px">{{ country }}</div>
+    <h1 style="font-size:clamp(34px,6vw,72px);line-height:.95;letter-spacing:-.04em;margin:0 0 12px">{{ place.n }}</h1>
+    <div style="font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-neutral-600)">{{ place.p }}</div>
+    <p style="font-size:20px;max-width:60ch;color:var(--color-neutral-800);margin:22px 0 0;text-wrap:pretty">{{ place.d }}</p>
+  </div>
+</header>
+
+<section style="padding:44px 40px;border-bottom:2px solid var(--color-divider)">
+  <div style="max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));border-top:2px solid var(--color-divider);border-left:1px solid var(--color-divider)">
+    <div style="padding:22px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+      <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:10px">Por qué vale la pena</div>
+      <p style="margin:0;font-size:16px;color:var(--color-neutral-800)">{{ place.why }}</p>
+    </div>
+    <div style="padding:22px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+      <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:10px">Dato curioso</div>
+      <p style="margin:0;font-size:16px;color:var(--color-neutral-800)">{{ place.curio }}</p>
+    </div>
+    <div style="padding:22px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+      <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:10px">Cómo llegar</div>
+      <p style="margin:0;font-size:16px;color:var(--color-neutral-800)">{{ place.how }}</p>
+    </div>
+    <div style="padding:22px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+      <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:10px">Cuánto tiempo</div>
+      <p style="margin:0;font-size:16px;color:var(--color-neutral-800)">{{ place.time }}</p>
+    </div>
+  </div>
+</section>
+
+<section style="padding:44px 40px;border-bottom:2px solid var(--color-divider)">
+  <div style="max-width:900px;margin:0 auto">
+    <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:18px">
+      <h2 style="font-size:clamp(24px,3.4vw,36px);letter-spacing:-.03em;margin:0">Cómo se ve</h2>
+      <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-neutral-600);margin-left:auto">{{ imgCount }}</div>
+    </div>
+    <div style="position:relative;border:2px solid var(--color-text);background:var(--color-neutral-200);aspect-ratio:16/9;overflow:hidden">
+      {{ imgEl }}
+      <div style="position:absolute;left:0;bottom:0;display:flex">
+        <button onClick="{{ prev }}" aria-label="Anterior" style="font-family:var(--font-heading);font-weight:800;font-size:15px;padding:12px 18px;border:0;background:var(--color-text);color:var(--color-bg);cursor:pointer" style-hover="background:var(--color-accent)">←</button>
+        <button onClick="{{ next }}" aria-label="Siguiente" style="font-family:var(--font-heading);font-weight:800;font-size:15px;padding:12px 18px;border:0;border-left:1px solid var(--color-bg);background:var(--color-text);color:var(--color-bg);cursor:pointer" style-hover="background:var(--color-accent)">→</button>
+      </div>
+      <div style="position:absolute;right:0;bottom:0;padding:8px 12px;background:var(--color-text);color:var(--color-bg);font-size:10px;letter-spacing:.12em;text-transform:uppercase">{{ imgCredit }}</div>
+    </div>
+    <div style="display:flex;gap:6px;margin-top:12px">
+      <sc-for list="{{ dots }}" as="dot" hint-placeholder-count="5">
+        <button onClick="{{ dot.go }}" aria-label="Foto" style="width:26px;height:6px;border:0;padding:0;cursor:pointer;background:{{ dot.bg }}"></button>
+      </sc-for>
+    </div>
+    <div style="font-size:13px;color:var(--color-neutral-600);margin-top:12px">{{ imgNote }}</div>
+  </div>
+</section>
+
+<section style="padding:44px 40px;border-bottom:2px solid var(--color-divider)">
+  <div style="max-width:900px;margin:0 auto">
+    <h2 style="font-size:clamp(24px,3.4vw,36px);letter-spacing:-.03em;margin:0 0 20px">Algo de historia</h2>
+    <div style="border-top:2px solid var(--color-divider);padding-top:22px">
+      <sc-for list="{{ history }}" as="par" hint-placeholder-count="2">
+        <p style="margin:0 0 16px;font-size:17px;line-height:1.6;color:var(--color-neutral-800);max-width:70ch;text-wrap:pretty">{{ par.text }}</p>
+      </sc-for>
+      <a href="{{ wikiUrl }}" target="_blank" rel="noopener" style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--color-accent)">Seguir leyendo en Wikipedia →</a>
+    </div>
+  </div>
+</section>
+
+<section style="padding:44px 40px;border-bottom:2px solid var(--color-divider)">
+  <div style="max-width:900px;margin:0 auto">
+    <h2 style="font-size:clamp(24px,3.4vw,36px);letter-spacing:-.03em;margin:0 0 22px">Lo que hay que cuidar</h2>
+    <div style="border-top:2px solid var(--color-divider)">
+      <sc-for list="{{ tips }}" as="tip" hint-placeholder-count="3">
+        <div style="display:grid;grid-template-columns:44px 1fr;gap:12px;padding:18px 0;border-bottom:1px solid var(--color-divider)">
+          <div style="font-family:var(--font-heading);font-weight:800;font-size:15px;color:var(--color-accent);letter-spacing:.08em">{{ tip.num }}</div>
+          <div style="font-size:16px;color:var(--color-neutral-800);text-wrap:pretty">{{ tip.text }}</div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:0;margin-top:34px;border-top:2px solid var(--color-divider);border-left:1px solid var(--color-divider)">
+      <div style="padding:22px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+        <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:12px">Qué ponerse</div>
+        <p style="margin:0;font-size:16px;color:var(--color-neutral-800);text-wrap:pretty">{{ place.clothes }}</p>
+      </div>
+      <div style="padding:22px;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider)">
+        <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:12px">Qué hacer ahí</div>
+        <sc-for list="{{ todo }}" as="td" hint-placeholder-count="3">
+          <div style="display:grid;grid-template-columns:14px 1fr;gap:10px;padding:6px 0;font-size:16px;color:var(--color-neutral-800)">
+            <span style="color:var(--color-accent);font-family:var(--font-heading);font-weight:800">·</span>
+            <span>{{ td.text }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:30px">
+      <a href="{{ ytUrl }}" target="_blank" rel="noopener" style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;padding:14px 22px;background:var(--color-accent);color:var(--color-bg)">Ver videos del lugar →</a>
+      <a href="{{ mapUrl }}" target="_blank" rel="noopener" style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;padding:14px 22px;border:2px solid var(--color-text);color:var(--color-text)" style-hover="border-color:var(--color-accent);color:var(--color-accent)">Verlo en el mapa →</a>
+    </div>
+  </div>
+</section>
+
+<section style="padding:44px 40px 72px">
+  <div style="max-width:900px;margin:0 auto">
+    <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent);margin-bottom:18px">Otros lugares del mismo país</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));border-top:2px solid var(--color-divider);border-left:1px solid var(--color-divider)">
+      <sc-for list="{{ siblings }}" as="sb" hint-placeholder-count="6">
+        <button onClick="{{ sb.go }}" style="padding:18px 20px;border:0;border-right:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);background:transparent;color:var(--color-text);display:block;width:100%;text-align:left;cursor:pointer;font-family:var(--font-body)" style-hover="background:var(--color-accent-100)">
+          <div style="font-family:var(--font-heading);font-weight:800;font-size:17px;letter-spacing:-.01em">{{ sb.n }}</div>
+          <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent);margin-top:5px">{{ sb.p }}</div>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:900,&quot;height&quot;:700},&quot;slug&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;embedded&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;onClose&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onOpen&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(slug: string) =&gt; void&quot;}}">
+class Component extends DCLogic {
+  THEMES = {
+    is: { bg:"#eef4f6", text:"#0f1e28", divider:"#c9d8de", accent:"#0d8f8c", a100:"#dff1f0", a400:"#4dbfb8", a700:"#0a6260",
+          n200:"#dde8ec", n400:"#a7bcc4", n500:"#7f9aa4", n600:"#5d7c88", n700:"#3f5f6c", n800:"#2b4b57" },
+    nl: { bg:"#f7f2e5", text:"#17203f", divider:"#d9cdb4", accent:"#c2451f", a100:"#f7e3d7", a400:"#e08a5c", a700:"#8d2f14",
+          n200:"#ebe3cf", n400:"#b5a98d", n500:"#8d8168", n600:"#6d6149", n700:"#574c39", n800:"#3d3527" }
+  };
+
+  state = { imgs: [], hist: "", idx: 0, lang: "es", loaded: false };
+
+  componentDidMount() { const p = this.place(); this._lastId = p ? p.s : ""; this.load(); }
+
+  place() {
+    const all = (typeof window !== "undefined" && window.PLACES) || [];
+    let id = this.state.id || (typeof window !== "undefined" && window.__openLugar) || this.props.slug || "";
+    if (!id) { try { id = new URLSearchParams(window.location.search).get("id") || ""; } catch (e) {} }
+    return all.find(p => p.s === id) || all[0] || null;
+  }
+
+  componentDidUpdate() {
+    const p = this.place();
+    const id = p ? p.s : "";
+    if (id && id !== this._lastId) {
+      this._lastId = id;
+      this.setState({ imgs: [], hist: "", idx: 0, loaded: false });
+      this.load();
+    }
+  }
+
+  async load() {
+    const p = this.place();
+    if (!p) { this.setState({ loaded: true }); return; }
+    this.loadHistory(p);
+    this.loadImages(p);
+  }
+
+  async loadHistory(p) {
+    const tries = [{ lang: "es", title: p.w || p.n }, { lang: "en", title: p.we || p.w || p.n }];
+    for (const t of tries) {
+      try {
+        const api = "https://" + t.lang + ".wikipedia.org/w/api.php?origin=*&format=json&formatversion=2&redirects=1&action=query&prop=extracts&exintro=1&explaintext=1&titles=" + encodeURIComponent(t.title);
+        const j = await (await fetch(api)).json();
+        const hist = ((((j.query || {}).pages || [])[0] || {}).extract || "").trim();
+        if (hist.length > 80) { this.setState({ hist, lang: t.lang, loaded: true }); return; }
+      } catch (e) {}
+    }
+    this.setState({ loaded: true });
+  }
+
+  async loadImages(p) {
+    const q = (p.w || p.n || "").replace(/\s*\([^)]*\)\s*/g, " ").trim();
+    const country = p.c === "nl" ? "Netherlands" : "Iceland";
+    for (const search of [q + " " + country, q]) {
+      try {
+        const api = "https://commons.wikimedia.org/w/api.php?origin=*&format=json&formatversion=2" +
+          "&action=query&generator=search&gsrnamespace=6&gsrlimit=24&gsrsearch=" + encodeURIComponent(search) +
+          "&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=1600";
+        const j = await (await fetch(api)).json();
+        const imgs = (((j.query || {}).pages) || [])
+          .map(x => ({ title: x.title || "", info: (x.imageinfo || [])[0] }))
+          .filter(x => x.info && /\.(jpe?g|png)$/i.test(x.info.url || ""))
+          .filter(x => !/(icon|logo|flag|map|diagram|symbol|coat|panorama_of_the_world|chart|graph|sign|plan|drawing)/i.test(x.title))
+          .map(x => ({
+            url: x.info.thumburl || x.info.url,
+            credit: ((((x.info.extmetadata || {}).Artist || {}).value) || "Wikimedia Commons").replace(/<[^>]*>/g, "").trim().slice(0, 38)
+          }))
+          .slice(0, 8);
+        if (imgs.length) { this.setState({ imgs, idx: 0, loaded: true }); return; }
+      } catch (e) {}
+    }
+    this.setState({ loaded: true });
+  }
+
+  renderVals() {
+    const all = (typeof window !== "undefined" && window.PLACES) || [];
+    let id = "";
+    try { id = new URLSearchParams(window.location.search).get("id") || ""; } catch (e) {}
+    const place = all.find(p => p.s === id) || all[0] || {};
+    let mode = "is";
+    try { mode = window.localStorage.getItem("viaje26:mode") === "nl" ? "nl" : "is"; } catch (e) {}
+    const q = (place.yt || place.n || "") + "";
+    const imgs = this.state.imgs || [];
+    const idx = imgs.length ? ((this.state.idx % imgs.length) + imgs.length) % imgs.length : 0;
+    const cur = imgs[idx] || {};
+    const own = (place.hist || "").trim();
+    const wiki = (this.state.hist || "").split(/\n+/).filter(x => x.trim().length > 60).slice(0, 2);
+    const hist = own ? [own].concat(wiki.slice(0, 1)) : wiki;
+    const step = (d) => this.setState(st => ({ idx: st.idx + d }));
+    const embedded = !!this.props.embedded;
+    return {
+      isEmbedded: embedded, isStandalone: !embedded,
+      close: this.props.onClose || (() => {}),
+      imgEl: cur.url ? React.createElement("img", { src: cur.url, alt: place.n || "", style: { width: "100%", height: "100%", objectFit: "cover", display: "block" } }) : null,
+      imgCredit: cur.credit || "",
+      imgCount: imgs.length ? (idx + 1) + " / " + imgs.length : (this.state.loaded ? "Sin fotos" : "Cargando…"),
+      imgNote: imgs.length ? "Fotos libres de Wikimedia Commons. El crédito del autor va sobre cada imagen." : (this.state.loaded ? "No se encontraron fotos libres de este lugar." : "Buscando fotos…"),
+      prev: () => step(-1), next: () => step(1),
+      dots: imgs.map((_, i) => ({ go: () => this.setState({ idx: i }), bg: i === idx ? "var(--color-accent)" : "var(--color-neutral-400)" })),
+      history: hist.length ? hist.map(text => ({ text })) : [{ text: this.state.loaded ? "Todavía no tenemos la historia de este lugar aquí." : "Cargando la historia…" }],
+      wikiUrl: "https://" + (this.state.lang || "es") + ".wikipedia.org/wiki/" + encodeURIComponent(place.w || place.n || ""),
+      t: this.THEMES[mode],
+      place,
+      country: place.c === "nl" ? "Países Bajos" : "Islandia",
+      tips: (place.tips || []).map((text, i) => ({ text, num: "0" + (i + 1) })),
+      todo: (place.todo || []).map(text => ({ text })),
+      ytUrl: "https://www.youtube.com/results?search_query=" + encodeURIComponent(q),
+      mapUrl: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent((place.n || "") + (place.c === "nl" ? " Netherlands" : " Iceland")),
+      siblings: all.filter(p => p.c === place.c && p.s !== place.s).map(p => ({
+        n: p.n, p: p.p,
+        go: () => {
+          if (this.props.onOpen) { this.props.onOpen(p.s); return; }
+          this.setState({ id: p.s, imgs: [], hist: "", idx: 0, loaded: false });
+          try { window.history.replaceState(null, "", "?id=" + p.s); } catch (e) {}
+          window.scrollTo(0, 0);
+          setTimeout(() => this.load(), 0);
+        }
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>
