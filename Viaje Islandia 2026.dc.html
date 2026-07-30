@@ -25,6 +25,14 @@ a:hover{color:var(--color-accent-700)}
 @keyframes brush{0%,100%{transform:translateY(0) rotate(var(--tilt,0deg))}50%{transform:translateY(-.03em) rotate(calc(var(--tilt,0deg) + 1.5deg))}}
 @media(prefers-reduced-motion:reduce){[data-anim]{animation:none !important}}
 @media(prefers-reduced-motion:reduce){[data-plane]{animation:none !important;offset-distance:52%}}
+/* --- Ajustes para pantallas chicas (movil) --- */
+@media(max-width:640px){
+  nav{padding-left:16px !important;padding-right:16px !important;gap:12px 18px !important}
+  header,section{padding-left:18px !important;padding-right:18px !important}
+  [style*="minmax(150px, 1fr)"]{grid-template-columns:1fr 1fr !important}
+  [style*="0px 34px"]{padding-left:14px !important;padding-right:14px !important}
+  [style*="110px 1fr auto"]{grid-template-columns:60px 1fr auto !important;gap:10px !important}
+}
 </style>
 </helmet>
 
